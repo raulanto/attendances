@@ -51,8 +51,8 @@ class GroupController extends ActiveController
                 $result[] = [
                     'gro_id' =>$grupo->gro_id,
                     'gro_code' =>$grupo->gro_code ,
-                    'gro_fksubject' =>$grupo->gro_fksubject,
-                    'gro_fkteacher' => $grupo->gro_fkteacher,
+                    'gro_fksubject' =>$grupo->groFksubject,
+                    'gro_fkteacher' => $grupo->groFkteacher,
                     'gro_fkclassroom' => $grupo->gro_fkclassroom,
                     'gro_date' =>$grupo->gro_date ,
                     'gro_time' => $grupo->gro_time,
