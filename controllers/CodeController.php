@@ -1,11 +1,12 @@
 <?php
 namespace app\controllers;
+use Yii;
 
 use yii\rest\ActiveController;
 use yii\filters\auth\CompositeAuth;
 use yii\filters\auth\HttpBearerAuth;
 use app\models\Code;
-
+use app\models\RegistroCodeForm;
 class CodeController extends ActiveController
 {
     public function behaviors()
@@ -66,14 +67,14 @@ class CodeController extends ActiveController
         }
     }
 
-    public function actionGenerar($fkGroup, $duration)
+    public function actionGenerar()
 {
     $model = new Code();
+            // Asigna los valores proporcionados
+            $model->load(Yii::$app->getRequest()->getBodyParams(), '');
+
 
     do {
-        // Asigna los valores proporcionados
-        $model->cod_fkgroup = $fkGroup;
-        $model->cod_duration = $duration;
 
         // Genera el código (puedes ajustar la lógica según tus necesidades)
         $model->cod_code = $this->generarCodigoUnico();

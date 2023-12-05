@@ -5,6 +5,7 @@ $db = require __DIR__ . '/db.php';
 
 $config = [
     'id' => 'basic',
+    'language' => 'es-Es',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'aliases' => [
@@ -13,8 +14,8 @@ $config = [
     ],
     'components' => [
         'request' => [
-            // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
-            'cookieValidationKey' => 'clasedesarrollodeaplicacionesparadispositivosmoviles',
+            //peneee 
+            'cookieValidationKey' => 'ddytytdddtyyfgigggiuguiuigiugiguggpene',
             'parsers' => [
                 'application/json' => 'yii\web\JsonParser',
             ]
@@ -23,6 +24,10 @@ $config = [
             'class' => 'yii\caching\FileCache',
         ],
         'user' => [
+            'identityClass'   => 'app\models\User',
+            'enableAutoLogin' => true,
+            'enableSession'   => false,
+            'loginUrl'        => null,
             'class' => 'webvimark\modules\UserManagement\components\UserConfig',
             'on afterLogin' => function ($event) {
                 \webvimark\modules\UserManagement\models\UserVisitLog::newVisitor($event->identity->id);
@@ -125,7 +130,8 @@ $config = [
                     'class'      => 'yii\rest\UrlRule',
                     'controller' => 'code',
                     'tokens' => [
-                        '{id}'        => '<id:\\d[\\d,]*>'
+                        '{id}'        => '<id:\\d[\\d,]*>',
+                        '{text}' => '<text:\w+>'
                     ],
                     'extraPatterns' => [
                         'GET codigos/{id}' => 'codigos',
@@ -137,7 +143,9 @@ $config = [
                     'class'      => 'yii\rest\UrlRule',
                     'controller' => 'library',
                     'tokens' => [
-                        '{id}'        => '<id:\\d[\\d,]*>'
+                        '{id}'        => '<id:\\d[\\d,]*>',
+                        
+
                     ],
                     'extraPatterns' => [
                         'GET librarys/{id}' => 'librarys'
@@ -195,7 +203,20 @@ $config = [
                         'POST registrar' => 'registrar',
                     ],
                 ],
-                               
+                //Regla para teacher
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'person',
+                    'tokens' => [
+                        '{id}' => '<id:\d[\\d,]*>',
+                        '{text}' => '<text:\w+>'
+                    ],
+                    'extraPatterns' => [
+                        'POST login' => 'login',
+                        'POST registrar' => 'registrar',
+                    ],
+                ],
+                
             ],
         ]
     

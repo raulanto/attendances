@@ -6,7 +6,6 @@ use yii\filters\auth\CompositeAuth;
 use yii\filters\auth\HttpBearerAuth;
 use app\models\Attendance;
 use app\models\Code;
-
 class AttendanceController extends ActiveController
 {
     public function behaviors()
@@ -65,12 +64,12 @@ class AttendanceController extends ActiveController
             return ['message' => 'No se encontraron asistencias para el ID proporcionado'];
         }
     }
-    public function actionGuardar($codigo, $fkList, $commit)
+    public function actionGuardar( $fkList, $commit)
     {
-            
-        $code = Code::findOne(['cod_code' => $codigo]);
+        $model->load(Yii::$app->getRequest()->getBodyParams(), '');
+        $code = Code::findOne(['cod_code' => $model->$codigo]);
 
-        $existingAttendance = Attendance::findOne(['att_fklist' => $fkList, 'att_fkcode' => $code->cod_id]);
+        $existingAttendance = Attendance::findOne(['att_fklist' => $model->$fkList, 'att_fkcode' => $code->cod_id]);
 
         if ($existingAttendance !== null) {
             return ['error' => 'Ya existe una asistencia registrada para el fk_list proporcionado y el código.'];
@@ -90,7 +89,7 @@ class AttendanceController extends ActiveController
                 $asistencia->att_fklist = $fkList;
                 $asistencia->att_date = date('Y-m-d');
                 $asistencia->att_time = date('H:i:s');
-                $asistencia->att_commit = $commit;
+                $asistencia->att_commit = $model->$commit;
 
                 if ($asistencia->save()) {
                     // Devolver la información requerida
@@ -99,7 +98,7 @@ class AttendanceController extends ActiveController
                         'duracion' => $duracion,
                         'tiempoGeneracion' => $fechaGeneracion,
                         'fk_list' => $fkList,
-                        'commit' => $commit,
+                        'commit' => $model->$commit,
                     ];
                 } else {
                     return ['error' => 'Error al guardar la asistencia. Detalles: ' . json_encode($asistencia->errors)];

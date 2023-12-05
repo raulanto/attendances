@@ -43,6 +43,7 @@ class TeacherController extends ActiveController
 
     public $enableCsrfValidation = false;
 
+    //login
     public function actionLogin() {
         $token = '';
         $model = new LoginForm();
@@ -52,7 +53,7 @@ class TeacherController extends ActiveController
         }
         return $token;
     }
-
+    //registrar
     public function actionRegistrar() { 
         $token = '';
         $model = new RegistroFrom();

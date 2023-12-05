@@ -64,12 +64,13 @@ class PersonController extends ActiveController
         $user->status = User::STATUS_ACTIVE;
         $user->email_confirmed = 1;
         if($user->save()) {
-            // $person->username = $model->username;
+            $user->username = $model->username;
             $person->per_name = $model->per_name;
             $person->per_paternal = $model->per_paternal;
             $person->per_maternal = $model->per_maternal;
             $person->per_mail = $model->per_mail;
             $person->per_phone = $model->per_phone;
+
             
             if($person->save()) {
                 $token = $user->auth_key;
@@ -79,4 +80,20 @@ class PersonController extends ActiveController
         }
         return $token;
     }
+
+    private function generarCodigoUnico()
+{
+    $caracteresPermitidos = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    $longitudCodigo = 10;
+    
+    $codigoUnico = '';
+    $caracteresPermitidosLength = strlen($caracteresPermitidos);
+
+    for ($i = 0; $i < $longitudCodigo; $i++) {
+        $codigoUnico .= $caracteresPermitidos[rand(0, $caracteresPermitidosLength - 1)];
+    }
+
+    return $codigoUnico;
+}
+
 }

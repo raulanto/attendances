@@ -37,7 +37,7 @@ class Person extends \yii\db\ActiveRecord
     {
         return [
             [['per_name', 'per_paternal', 'per_maternal', 'per_mail', 'per_phone'], 'required'],
-            [['per_code', 'per_phone'], 'string', 'max' => 10],
+            [[ 'per_phone'], 'string', 'max' => 10],
             [['per_name', 'per_paternal', 'per_maternal'], 'string', 'max' => 50],
             [['per_mail'], 'string', 'max' => 100],
         ];
@@ -50,7 +50,6 @@ class Person extends \yii\db\ActiveRecord
     {
         return [
             'per_id' => 'Per ID',
-            'per_code' => 'Per Code',
             'per_name' => 'Per Name',
             'per_paternal' => 'Per Paternal',
             'per_maternal' => 'Per Maternal',
