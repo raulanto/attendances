@@ -97,4 +97,9 @@ class Teacher extends \yii\db\ActiveRecord
             }
         ];
     }
+        //funcion que retorna el nombre completo
+        public function getCompleto()
+        {
+            return $this->tea_name.' '.$this->tea_paternal.' '.$this->tea_maternal;
+        }
 }

@@ -67,4 +67,10 @@ class Subject extends \yii\db\ActiveRecord
     {
         return $this->hasMany(SubjectMajor::class, ['submaj_fksubject' => 'sub_id']);
     }
+
+    //funcion que retorna el nombre completo
+    public function getMateria()
+    {
+        return $this->sub_name;
+    }
 }

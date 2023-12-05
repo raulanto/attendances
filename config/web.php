@@ -216,6 +216,18 @@ $config = [
                         'POST registrar' => 'registrar',
                     ],
                 ],
+                //Regla para traer todos los grupo de una persona especifico
+                [
+                    'class'      => 'yii\rest\UrlRule',
+                    'controller' => 'group',
+                    'tokens' => [
+                        '{id}'        => '<id:\\d[\\d,]*>',
+                        '{text}' => '<text:\w+>'
+                    ],
+                    'extraPatterns' => [
+                        'GET grupos/{id}' => 'grupos'
+                    ],
+                ],
                 
             ],
         ]

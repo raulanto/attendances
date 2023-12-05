@@ -57,6 +57,7 @@ class CodeController extends ActiveController
                     'cod_time' => $codigo->cod_time,
                     'cod_date' => $codigo->cod_date,
                     'cod_duration' => $codigo->cod_duration,
+                    'cod_fkgroup'=>$codigo->cod_fkgroup,
                     // Puedes agregar otros campos si es necesario
                 ];
             }
