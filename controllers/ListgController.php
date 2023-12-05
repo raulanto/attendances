@@ -1,11 +1,13 @@
 <?php
 namespace app\controllers;
  
+use app\models\Code;
 use yii\rest\ActiveController;
 use yii\filters\auth\CompositeAuth;
 use yii\filters\auth\HttpBearerAuth;
 use app\models\Listg;
 use app\models\Person;
+
 
 class ListgController extends ActiveController
 {
@@ -31,7 +33,7 @@ class ListgController extends ActiveController
             'authMethods' => [
                 HttpBearerAuth::className(),
             ],
-            'except' => ['index', 'view', 'listas','buscar','total']
+            'except' => ['index', 'view', 'listas','buscar','total','gruposp']
         ];
     
         return $behaviors;
@@ -105,7 +107,12 @@ public function actionBuscar($text = '', $id = null)
 }
 
 
-public function actionTotal($text = '', $id = null)
+    /**
+     * @param $text
+     * @param $id
+     * @return bool|int|string|null
+     */
+    public function actionTotal($text = '', $id = null)
 {
     $total = Listg::find()->joinWith(['listFkgroup', 'listFkperson']);
     if ($id !== null) {
@@ -118,6 +125,30 @@ public function actionTotal($text = '', $id = null)
     }
     $total = $total->count();
     return $total;
+}
+
+public function  actionGruposp($id=null){
+    // Busca todos los códigos que pertenecen al grupo
+    $lista = Listg::find()
+        ->where(['list_Fkperson' => $id])
+        ->all();
+    // Verifica si se encontraron códigos
+    if (!empty($lista)) {
+        $result = [];
+        foreach ($lista as $lista) {
+            $result[] = [
+                'list_id' => $lista->list_id,
+                'listFkgroup' => $lista->listFkgroup,
+                'person' => $lista->listFkperson->completo,
+
+            ];
+        }
+        return $result;
+    } else {
+        // Manejar la situación en la que no se encontraron códigos
+        return ['message' => 'No se encontraron códigos para el grupo proporcionado'];
+    }
+
 }
 
 
