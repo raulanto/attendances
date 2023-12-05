@@ -6,7 +6,7 @@ use yii\rest\ActiveController;
 use yii\filters\auth\CompositeAuth;
 use yii\filters\auth\HttpBearerAuth;
 use app\models\Code;
-use app\models\RegistroCodeForm;
+use app\models\RegistroCodeFrom;
 class CodeController extends ActiveController
 {
     public function behaviors()
@@ -73,13 +73,10 @@ class CodeController extends ActiveController
     $model = new Code();
             // Asigna los valores proporcionados
             $model->load(Yii::$app->getRequest()->getBodyParams(), '');
-
-
     do {
 
         // Genera el código (puedes ajustar la lógica según tus necesidades)
         $model->cod_code = $this->generarCodigoUnico();
-
         // Asigna la fecha y hora actual
         $model->cod_date = date('Y-m-d');
         $model->cod_time = date('H:i:s');

@@ -6,6 +6,7 @@ use yii\filters\auth\CompositeAuth;
 use yii\filters\auth\HttpBearerAuth;
 use app\models\Attendance;
 use app\models\Code;
+use app\models\RegistroAttendanceFrom;
 class AttendanceController extends ActiveController
 {
     public function behaviors()
