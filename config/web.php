@@ -162,7 +162,8 @@ $config = [
                     'extraPatterns' => [
                         'GET buscar/{text}' => 'buscar',
                         'GET total/{text}' => 'total',
-                        'GET gruposp/{text}' => 'gruposp'
+                        'GET gruposp/{text}' => 'gruposp',
+                        'GET listatodos/{text}' => 'listatodos'
                     ],
                 ],
                 //Regla para buscar en library

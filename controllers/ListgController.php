@@ -33,7 +33,7 @@ class ListgController extends ActiveController
             'authMethods' => [
                 HttpBearerAuth::className(),
             ],
-            'except' => ['index', 'view', 'listas','buscar','total','gruposp']
+            'except' => ['index', 'view', 'listas','buscar','total','gruposp','listatodos']
         ];
     
         return $behaviors;
@@ -150,6 +150,31 @@ public function  actionGruposp($id=null){
     }
 
 }
+
+
+public function actionListatodos($id = null)
+{
+    // Busca todos los códigos que pertenecen al grupo
+    $lista = Listg::find()
+        ->where(['list_fkgroup' => $id])
+        ->all();
+
+    // Verifica si se encontraron códigos
+    if (!empty($lista)) {
+        $result = [];
+        foreach ($lista as $item) {
+            $result[] = [
+                'list_fkgroup' => $item->list_id,
+                'person' => $item->listFkperson->completo,
+            ];
+        }
+        return $result;
+    } else {
+        // Manejar la situación en la que no se encontraron códigos
+        return ['message' => 'No se encontraron códigos para el grupo proporcionado'];
+    }
+}
+
 
 
 }
