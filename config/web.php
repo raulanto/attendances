@@ -102,6 +102,7 @@ $config = [
                     'defaults' => ['id' => null],
                 ],
                 ['class' => 'yii\web\UrlRule', 'pattern' => 'question/total/<text:[\w\-]+>/<id:\d+>', 'route' => 'question/total'],
+
                 //Regla para la funcion que trae la lista de un cierto grupo
                 [
                     'class'      => 'yii\rest\UrlRule',
@@ -118,13 +119,17 @@ $config = [
                     'class'      => 'yii\rest\UrlRule',
                     'controller' => 'attendance',
                     'tokens' => [
-                        '{id}'        => '<id:\\d[\\d,]*>'
+                        '{id}'        => '<id:\\d[\\d,]*>',
+                        '{text}' => '<text:\w+>',
+                        '{text}' => '<text:\w+>',
                     ],
                     'extraPatterns' => [
                         'GET asistencias/{id}' => 'asistencias',
-                        'POST guardar' => 'guardar'
+                        'POST guardar/{text}/{id}/{text}' => 'guardar',
+                        'GET total/{id}' => 'total'
                     ],
                 ],
+
                 //Regla para traer todos los codigos de un grupo especifico
                 [
                     'class'      => 'yii\rest\UrlRule',
@@ -135,7 +140,8 @@ $config = [
                     ],
                     'extraPatterns' => [
                         'GET codigos/{id}' => 'codigos',
-                        'POST generar' => 'generar'
+                        'POST generar' => 'generar',
+                        'PUT update' => 'update'
                     ],
                 ],
                 //Regla para traer todos los archivos de un grupo especifico

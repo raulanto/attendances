@@ -42,15 +42,18 @@ class CodeController extends ActiveController
 
     public function actionCodigos($id)
     {
-
+        // Obtén los códigos para el grupo proporcionado
         $codigos = Code::find()
             ->where(['cod_fkgroup' => $id])
             ->all();
     
-
+        // Verifica si hay códigos
         if (!empty($codigos)) {
             $result = [];
+
             foreach ($codigos as $codigo) {
+
+    
                 $result[] = [
                     'cod_id' => $codigo->cod_id,
                     'cod_code' => $codigo->cod_code,
@@ -58,41 +61,53 @@ class CodeController extends ActiveController
                     'cod_date' => $codigo->cod_date,
                     'cod_duration' => $codigo->cod_duration,
                     'cod_fkgroup' => $codigo->cod_fkgroup,
-
+                    'total' => $totalAttendance= Yii::$app->runAction('attendance/total', ['att_fkcode' => $codigo->cod_id]), 
                 ];
             }
     
-
+            // Revierte el resultado y devuelve
             $result = array_reverse($result);
-    
             return $result;
         } else {
-
             return ['message' => 'No se encontraron códigos para el grupo proporcionado'];
         }
     }
     
+    
 
-    public function actionGenerar()
-{
-    $model = new Code();
-            // Asigna los valores proporcionados
+    public function actionGenerar($id = null)
+    {
+        if ($id !== null) {
+            $model = Code::findOne($id);
+            if ($model === null) {
+                return ['error' => 'No se encontró el código con el ID proporcionado'];
+            }
             $model->load(Yii::$app->getRequest()->getBodyParams(), '');
-    do {
-
-        // Genera el código (puedes ajustar la lógica según tus necesidades)
-        $model->cod_code = $this->generarCodigoUnico();
-        // Asigna la fecha y hora actual
-        $model->cod_date = date('Y-m-d');
-        $model->cod_time = date('H:i:s');
-    } while ($this->codigoExistente($model->cod_code)); // Verifica si el código ya existe
-
-    if ($model->save()) {
-        return $model; // Devuelve el modelo creado si se guarda con éxito
-    } else {
-        return ['error' => 'Error al generar el código. Detalles: ' . json_encode($model->errors)];
+            // Asigna la fecha y hora actuales
+            $model->cod_date = date('Y-m-d');
+            $model->cod_time = date('H:i:s');
+            // Guarda el modelo
+            if ($model->save()) {
+                return $model; 
+            } else {
+                return ['error' => 'Error al actualizar el código. Detalles: ' . json_encode($model->errors)];
+            }
+        } else {
+            $model = new Code();
+            $model->load(Yii::$app->getRequest()->getBodyParams(), '');
+            do {
+                $model->cod_code = $this->generarCodigoUnico();
+                $model->cod_date = date('Y-m-d');
+                $model->cod_time = date('H:i:s');
+            } while ($this->codigoExistente($model->cod_code)); 
+            if ($model->save()) {
+                return $model; 
+            } else {
+                return ['error' => 'Error al generar el código. Detalles: ' . json_encode($model->errors)];
+            }
+        }
     }
-}
+    
 
 private function generarCodigoUnico()
 {
@@ -115,6 +130,7 @@ private function codigoExistente($codigo)
 {
     return Code::find()->where(['cod_code' => $codigo])->exists();
 }
+
 
       
 }
