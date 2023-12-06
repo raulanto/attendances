@@ -111,7 +111,8 @@ $config = [
                         '{id}'        => '<id:\\d[\\d,]*>'
                     ],
                     'extraPatterns' => [
-                        'GET listas/{id}' => 'listas'
+                        'GET listas/{id}' => 'listas',
+                        'GET grupop/{id}' => 'grupop'
                     ],
                 ],
                 //Regla que trae el detalle de asistencia de un cierto fklist 

@@ -65,4 +65,10 @@ class GroupController extends ActiveController
             return ['message' => 'No se encontraron códigos para el grupo proporcionado'];
         }
     }
+
+
+
+    public function actionGruposlista(){
+        return $model;
+    }
 }
