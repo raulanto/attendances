@@ -4,6 +4,7 @@ namespace app\controllers;
 use yii\rest\ActiveController;
 use yii\filters\auth\CompositeAuth;
 use yii\filters\auth\HttpBearerAuth;
+use app\models\Major;
 
 class MajorController extends ActiveController
 {
@@ -34,6 +35,28 @@ class MajorController extends ActiveController
     
         return $behaviors;
     }
+
+    public function actionBuscar($text='') {
+    $consulta = Major::find()->where(['like', new \yii\db\Expression("CONCAT(maj_id, ' ', maj_name, ' ', maj_code)"), $text]);
+
+    $majors = new \yii\data\ActiveDataProvider([
+        'query' => $consulta,
+        'pagination' => [
+            'pageSize' => 20 // Número de resultados por página
+        ],
+    ]);
+
+    return $majors->getModels();
+}
+
+public function actionTotal($text='') {
+    $total = Major::find();
+    if($text != '') {
+        $total = $total->where(['like', new \yii\db\Expression("CONCAT(maj_id, ' ', maj_name, ' ', maj_code)"), $text]);
+    }
+    $total = $total->count();
+    return $total;
+}
     public $modelClass = 'app\models\Major';
 
     public $enableCsrfValidation = false;

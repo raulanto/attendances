@@ -39,6 +39,7 @@ class GroupController extends ActiveController
     public $modelClass = 'app\models\Group';
 
     public $enableCsrfValidation = false;
+
     public function actionGrupos($id)
     {
         // Busca todos los códigos que pertenecen al grupo
@@ -65,4 +66,27 @@ class GroupController extends ActiveController
             return ['message' => 'No se encontraron códigos para el grupo proporcionado'];
         }
     }
+
+    public function actionBuscar($text='')
+    {   //Se agrego el  join para las fk
+        $consulta = Group::find()->joinWith(['groFksubject'])->where(['like', new \yii\db\Expression(
+            "CONCAT(gro_id, ' ', gro_code, ' ', sub_name, ' ', gro_fkteacher, ' ', gro_fkclassroom)"), $text]);
+        $groups = new \yii\data\ActiveDataProvider([
+            'query' => $consulta,
+            'pagination' => [
+                'pageSize' => 20 // Número de resultados por página
+            ],
+        ]);
+        return $groups->getModels();
+    }
+    public function actionTotal($text='') {
+        $total = Group::find();
+        if($text != '') {
+            $total = $total->where(['like', new \yii\db\Expression("CONCAT(gro_id, ' ', gro_code, ' ', gro_fksubject, ' ', gro_fkteacher, ' ', gro_fkclassroom)"), $text]);
+        }
+        $total = $total->count();
+        return $total;
+    }
+
+
 }

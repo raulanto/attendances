@@ -4,6 +4,7 @@ namespace app\controllers;
 use yii\rest\ActiveController;
 use yii\filters\auth\CompositeAuth;
 use yii\filters\auth\HttpBearerAuth;
+use app\models\Classroom;
 
 class ClassroomController extends ActiveController
 {
@@ -34,6 +35,27 @@ class ClassroomController extends ActiveController
     
         return $behaviors;
     }
+
+    public function actionBuscar($text='')
+    {
+        $consulta = Classroom::find()->where(['like', new \yii\db\Expression("CONCAT(clas_id, ' ', clas_name, ' ', clas_description)"), $text]);
+        $classroom = new \yii\data\ActiveDataProvider([
+            'query' => $consulta,
+            'pagination' => [
+                'pageSize' => 20 // Número de resultados por página
+            ],
+        ]);
+        return $classroom->getModels();
+    }
+    public function actionTotal($text='') {
+        $total = Classroom::find();
+        if($text != '') {
+            $total = $total->where(['like', new \yii\db\Expression("CONCAT(clas_id, ' ', clas_name, ' ', clas_description)"), $text]);
+        }
+        $total = $total->count();
+        return $total;
+    }
+
     public $modelClass = 'app\models\Classroom';  
     
     public $enableCsrfValidation = false;    

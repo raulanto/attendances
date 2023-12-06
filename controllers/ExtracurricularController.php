@@ -4,6 +4,7 @@ namespace app\controllers;
 use yii\rest\ActiveController;
 use yii\filters\auth\CompositeAuth;
 use yii\filters\auth\HttpBearerAuth;
+use app\models\extracurricular;
 
 class ExtracurricularController extends ActiveController
 {
@@ -29,7 +30,7 @@ class ExtracurricularController extends ActiveController
             'authMethods' => [
                 HttpBearerAuth::className(),
             ],
-            'except' => ['index', 'view']
+            'except' => ['index', 'view', 'extracurriculars']
         ];
     
         return $behaviors;
