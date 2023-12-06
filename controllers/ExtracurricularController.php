@@ -4,7 +4,7 @@ namespace app\controllers;
 use yii\rest\ActiveController;
 use yii\filters\auth\CompositeAuth;
 use yii\filters\auth\HttpBearerAuth;
-use app\models\extracurricular;
+use app\models\Extracurricular; 
 
 class ExtracurricularController extends ActiveController
 {
@@ -30,12 +30,35 @@ class ExtracurricularController extends ActiveController
             'authMethods' => [
                 HttpBearerAuth::className(),
             ],
-            'except' => ['index', 'view', 'extracurriculars']
+            'except' => ['index', 'view', 'buscar'] 
         ];
     
         return $behaviors;
     }
     public $modelClass = 'app\models\Extracurricular';   
 
-    public $enableCsrfValidation = false;    
+    public $enableCsrfValidation = false; 
+    
+    
+    public function actionBuscar($text='') {
+        $consulta = Extracurricular::find()->where(['like', new \yii\db\Expression("CONCAT(ext_id, ' ', ext_name, ' ', ext_date, ' ', ext_place, ' ', ext_code)"), $text]);
+    
+        $extras = new \yii\data\ActiveDataProvider([
+            'query' => $consulta,
+            'pagination' => [
+                'pageSize' => 20 // Número de resultados por página
+            ],
+        ]);
+    
+        return $extras->getModels();
+    }
+
+    public function actionTotal($text='') {
+        $total = Extracurricular::find();
+        if($text != '') {
+            $total = $total->where(['like', new \yii\db\Expression("CONCAT(ext_id, ' ', ext_name, ' ', ext_code, ' ', ext_date, ' ', ext_place)"), $text]);
+        }
+        $total = $total->count();
+        return $total;
+    }
 }

@@ -65,8 +65,9 @@ $config = [
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'code', 'pluralize' => false],
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'degree', 'pluralize' => false],
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'extracurricular', 'pluralize' => false],
+                ['class' => 'yii\rest\UrlRule', 'controller' => 'extra-group', 'pluralize' => false],
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'extra-person', 'pluralize' => false],
-                ['class' => 'yii\rest\UrlRule', 'controller' => 'grade', 'pluralize' => false],
+                ['class' => 'yii\rest\UrlRule', 'controller' => 'grade-person', 'pluralize' => false],
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'person', 'pluralize' => false],
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'question', 'pluralize' => false],
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'tag', 'pluralize' => false],
@@ -78,6 +79,8 @@ $config = [
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'subject', 'pluralize' => false],
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'major', 'pluralize' => false],
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'subject-major', 'pluralize' => false],
+                ['class' => 'yii\web\UrlRule', 'pattern' => 'extracurricular/total/<text:.*>', 'route' => 'extracurricular/total'],
+
                 //reglas para buscar total
                 [
                     'class' => 'yii\web\UrlRule',
@@ -439,6 +442,22 @@ $config = [
                         'GET grupos/{id}' => 'grupos'
                     ],
                 ],
+
+                //regla para buscar en extracurricular
+
+                [
+                    'class'      => 'yii\rest\UrlRule',
+                    'controller' => 'extracurricular',
+                    'tokens' => [
+                        '{id}'        => '<id:\\d[\\d,]*>',
+                        '{text}' => '<text:\\w+>'
+                    ],
+                    'extraPatterns' => [
+                        'GET buscar/{text}' => 'buscar',
+                        'GET total' => 'id',
+                    ],
+                ],
+                ['class' => 'yii\web\UrlRule', 'pattern' => 'extracurricular/buscar/<text:.*>', 'route' => 'extracurricular/buscar'],  
 
             ],
         ]
