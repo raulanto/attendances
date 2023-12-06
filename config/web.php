@@ -190,6 +190,9 @@ $config = [
                     'extraPatterns' => [
                         'GET buscar/{text}' => 'buscar',
                         'GET total/{text}' => 'total',
+                        'GET qmaestro/{text}' => 'qmaestro',
+                        'GET qperson/{text}' => 'qperson',
+
                     ],
                 ],
                 //Regla para teacher

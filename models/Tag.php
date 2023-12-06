@@ -56,4 +56,8 @@ class Tag extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Question::class, ['que_fktag' => 'tag_id']);
     }
+
+    public function geTag(){
+        return $tag_name;
+    }
 }

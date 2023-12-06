@@ -30,7 +30,7 @@ class QuestionController extends ActiveController
             'authMethods' => [
                 HttpBearerAuth::className(),
             ],
-            'except' => ['index', 'view','questions','buscar','total']
+            'except' => ['index', 'view','questions','buscar','total','qmaestro','qperson']
         ];
     
         return $behaviors;
@@ -71,8 +71,8 @@ class QuestionController extends ActiveController
                     'que_description'=> $question->que_description,
                     'que_fkperson' => $question->que_fkperson,
                     'que_fkteacher'=> $question->que_fkteacher,
-                    'person'       => $question->queFkperson->per_name,
-                    'teacher'      => $question->queFkteacher->tea_name,
+                    'person'       => $question->queFkperson->completo,
+                    'teacher'      => $question->queFkteacher->completo,
                 ];
             }
             return $result;
@@ -123,6 +123,67 @@ class QuestionController extends ActiveController
         $total = $total->count();
         return $total;
     }
+
+
+    
+public function actionQmaestro($id = null)
+{
+    // Busca todos los códigos que pertenecen al grupo
+    $lista = Question::find()
+        ->where(['que_fkteacher' => $id])
+        ->all();
+
+    // Verifica si se encontraron códigos
+    if (!empty($lista)) {
+        $result = [];
+        foreach ($lista as $question) {
+            $result[] = [
+                'que_id'       => $question->que_id,
+                'tag'    => $question->queFktag,
+                'que_description'=> $question->que_description,
+                'que_fkperson' => $question->que_fkperson,
+                'que_fkteacher'=> $question->que_fkteacher,
+                'teacher'      => $question->queFkteacher->completo,
+            ];
+        }
+        return $result;
+    } else {
+        // Manejar la situación en la que no se encontraron códigos
+        return ['message' => 'No se encontraron preguntas para el maestro proporcionado proporcionado'];
+    }
+}
+
+
+    
+public function actionQperson($id = null)
+{
+    // Busca todos los códigos que pertenecen al grupo
+    $lista = Question::find()
+        ->where(['que_fkperson' => $id])
+        ->all();
+
+    // Verifica si se encontraron códigos
+    if (!empty($lista)) {
+        $result = [];
+        foreach ($lista as $question) {
+            $result[] = [
+                'que_id'       => $question->que_id,
+                'tag'    => $question->queFktag,
+                'que_description'=> $question->que_description,
+                'que_fkperson' => $question->que_fkperson,
+                'que_fkteacher'=> $question->que_fkteacher,
+                'person'       => $question->queFkperson->completo,
+
+            ];
+        }
+        return $result;
+    } else {
+        // Manejar la situación en la que no se encontraron códigos
+        return ['message' => 'No se encontraron preguntas para el maestro proporcionado proporcionado'];
+    }
+}
+
+
 
     
 }
