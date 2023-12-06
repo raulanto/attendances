@@ -39,15 +39,15 @@ class CodeController extends ActiveController
     public $modelClass = 'app\models\Code';
     
     public $enableCsrfValidation = false;
-    //Codigos
+
     public function actionCodigos($id)
     {
-        // Busca todos los códigos que pertenecen al grupo
+
         $codigos = Code::find()
             ->where(['cod_fkgroup' => $id])
             ->all();
     
-        // Verifica si se encontraron códigos
+
         if (!empty($codigos)) {
             $result = [];
             foreach ($codigos as $codigo) {
@@ -57,16 +57,21 @@ class CodeController extends ActiveController
                     'cod_time' => $codigo->cod_time,
                     'cod_date' => $codigo->cod_date,
                     'cod_duration' => $codigo->cod_duration,
-                    'cod_fkgroup'=>$codigo->cod_fkgroup,
-                    // Puedes agregar otros campos si es necesario
+                    'cod_fkgroup' => $codigo->cod_fkgroup,
+
                 ];
             }
+    
+
+            $result = array_reverse($result);
+    
             return $result;
         } else {
-            // Manejar la situación en la que no se encontraron códigos
+
             return ['message' => 'No se encontraron códigos para el grupo proporcionado'];
         }
     }
+    
 
     public function actionGenerar()
 {

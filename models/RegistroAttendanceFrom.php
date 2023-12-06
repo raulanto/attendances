@@ -3,10 +3,9 @@ namespace app\models;
 
 use yii\base\Model;
 
-class RegistroFrom extends Model
+class RegistroAttendanceFrom extends Model
 {
-    public $username;
-    public $password;
+
     public $tea_name;
     public $tea_paternal;
     public $tea_maternal;
