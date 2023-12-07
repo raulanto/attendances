@@ -67,26 +67,38 @@ class TeacherController extends ActiveController
         $model->load(Yii::$app->getRequest()->getBodyParams(), '');
         $user = new User();
         $teacher = new Teacher();
-        $user->username = $model->username;
-        $user->password = $model->password;
-        $user->status = User::STATUS_ACTIVE;
-        $user->email_confirmed = 1;
-        if($user->save()) {
+        
+        try {
             $user->username = $model->username;
-            $teacher->tea_name = $model->tea_name;
-            $teacher->tea_paternal = $model->tea_paternal;
-            $teacher->tea_maternal = $model->tea_maternal;
-            $teacher->tea_mail = $model->tea_mail;
-            $teacher->tea_phone = $model->tea_phone;
-            $teacher->tea_fkdegree = $model->tea_fkdegree;
-            $teacher->tea_fkuser = $user->id;
+            $user->password = $model->password;
+            $user->status = User::STATUS_ACTIVE;
+            $user->email_confirmed = 1;
             
-            if($teacher->save()) {
-                $token = $user->auth_key;
+            if ($user->save()) {
+                
+                $teacher->tea_name = $model->tea_name;
+                $teacher->tea_paternal = $model->tea_paternal;
+                $teacher->tea_maternal = $model->tea_maternal;
+                $teacher->tea_mail = $model->tea_mail;
+                $teacher->tea_phone = $model->tea_phone;
+                $teacher->tea_fkdegree = $model->tea_fkdegree;
+                $teacher->tea_fkuser = $user->id;
+                if ($teacher->save()) {
+                    $token = $user->auth_key;
+                } else {
+                    // Manejar error al guardar el maestro
+                    return ['error' => 'Error al guardar el maestro.'];
+                }
+            } else {
+                // Manejar error al guardar el usuario
+                return ['error' => 'Error al guardar el usuario.'];
             }
-        } else {
-            return $user;
+        } catch (Exception $e) {
+            // Manejar excepciones generales
+            return ['error' => 'Error inesperado: ' . $e->getMessage()];
         }
+    
         return $token;
     }
+    
 }

@@ -1,5 +1,5 @@
 <?php
-//CONTROLADOR DE TABLA PERSON
+
 namespace app\models;
 
 use Yii;
@@ -8,16 +8,16 @@ use Yii;
  * This is the model class for table "person".
  *
  * @property int $per_id
- * @property string|null $per_code
  * @property string $per_name
  * @property string $per_paternal
  * @property string $per_maternal
  * @property string $per_mail
  * @property string $per_phone
+ * @property int|null $per_fkuser
  *
- * @property ExtraPerson[] $extraPeople
  * @property Grade[] $grades
  * @property Listg[] $listgs
+ * @property User $perFkuser
  * @property Question[] $questions
  */
 class Person extends \yii\db\ActiveRecord
@@ -37,9 +37,11 @@ class Person extends \yii\db\ActiveRecord
     {
         return [
             [['per_name', 'per_paternal', 'per_maternal', 'per_mail', 'per_phone'], 'required'],
-            [[ 'per_phone'], 'string', 'max' => 10],
+            [['per_fkuser'], 'integer'],
             [['per_name', 'per_paternal', 'per_maternal'], 'string', 'max' => 50],
             [['per_mail'], 'string', 'max' => 100],
+            [['per_phone'], 'string', 'max' => 10],
+            [['per_fkuser'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['per_fkuser' => 'id']],
         ];
     }
 
@@ -55,17 +57,8 @@ class Person extends \yii\db\ActiveRecord
             'per_maternal' => 'Per Maternal',
             'per_mail' => 'Per Mail',
             'per_phone' => 'Per Phone',
+            'per_fkuser' => 'Per Fkuser',
         ];
-    }
-
-    /**
-     * Gets query for [[ExtraPeople]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getExtraPeople()
-    {
-        return $this->hasMany(ExtraPerson::class, ['extper_fkperson' => 'per_id']);
     }
 
     /**
@@ -89,6 +82,16 @@ class Person extends \yii\db\ActiveRecord
     }
 
     /**
+     * Gets query for [[PerFkuser]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPerFkuser()
+    {
+        return $this->hasOne(User::class, ['id' => 'per_fkuser']);
+    }
+
+    /**
      * Gets query for [[Questions]].
      *
      * @return \yii\db\ActiveQuery
@@ -97,7 +100,8 @@ class Person extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Question::class, ['que_fkperson' => 'per_id']);
     }
-    //funcion que retorna el nombre completo
+
+    //funcion que retorna el nombre Completo
     public function getCompleto()
     {
         return $this->per_name.' '.$this->per_paternal.' '.$this->per_maternal;
