@@ -86,7 +86,7 @@ class PersonController extends ActiveController
         } else {
             return $user;
         }
-        return $token;
+        return ['token'=>$token,'user'=>$person->per_id];
     }
 
 

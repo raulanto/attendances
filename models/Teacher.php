@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use webvimark\modules\UserManagement\models\User;
 
 /**
  * This is the model class for table "teacher".

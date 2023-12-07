@@ -82,10 +82,12 @@ class TeacherController extends ActiveController
             $teacher->tea_fkuser = $user->id;
             if($teacher->save()) {
                 $token = $user->auth_key;
+            }else{
+                return "maestro no creado";
             }
         } else {
             return $user;
         }
-        return $token;
+        return ['token'=>$token,'user'=>$teacher->tea_id];
     }
 }

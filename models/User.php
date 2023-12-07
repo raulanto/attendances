@@ -4,6 +4,7 @@ namespace app\models;
 
 use webvimark\modules\UserManagement\models\queries\UserQuery;
 use Yii;
+use \yii\db\ActiveRecord;
 
 class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
 {
@@ -83,11 +84,11 @@ class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
         return $this->password === $password;
     }
 
-    /**
-    * @inheritdoc
-    */
-    public static function find()
-    {
-        return new UserQuery(get_called_class());
-    }
+    // /**
+    // * @inheritdoc
+    // */
+    // public static function find()
+    // {
+    //     return new UserQuery(get_called_class());
+    // }
 }
