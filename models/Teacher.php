@@ -37,7 +37,7 @@ class Teacher extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['tea_name', 'tea_paternal', 'tea_maternal', 'tea_mail', 'tea_phone', 'tea_fkdegree'], 'required'],
+            [['tea_name', 'tea_paternal', 'tea_maternal', 'tea_mail', 'tea_phone', 'tea_fkdegree','tea_fkuser'], 'required'],
             [['tea_fkdegree', 'tea_fkuser'], 'integer'],
             [['tea_name', 'tea_paternal', 'tea_maternal'], 'string', 'max' => 50],
             [['tea_mail'], 'string', 'max' => 100],

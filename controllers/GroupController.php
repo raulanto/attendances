@@ -68,7 +68,5 @@ class GroupController extends ActiveController
 
 
 
-    public function actionGruposlista(){
-        return $model;
-    }
+
 }

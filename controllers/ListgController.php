@@ -33,7 +33,7 @@ class ListgController extends ActiveController
             'authMethods' => [
                 HttpBearerAuth::className(),
             ],
-            'except' => ['index', 'view', 'listas','buscar','total','gruposp','listatodos']
+            'except' => ['index', 'view', 'listas','buscar','total','gruposp','listatodos','listasp']
         ];
     
         return $behaviors;
@@ -56,6 +56,39 @@ class ListgController extends ActiveController
         $listas = $listas
             ->andWhere(['like', new \yii\db\Expression(
                 "CONCAT(list_id, ' ', list_fkgroup, ' ', list_fkperson, ' ', CONCAT(person.per_name, ' ', person.per_paternal, ' ', person.per_maternal))"), $text]);
+    }
+
+    $dataProvider = new \yii\data\ActiveDataProvider([
+        'query' => $listas,
+        'pagination' => [
+            'pageSize' => 20 
+        ],
+    ]);
+    // Verifica si se encontraron listas
+    if (!empty($dataProvider->getModels())) {
+        $result = [];
+        foreach ($dataProvider->getModels() as $datos=> $lista) {
+            $result[] = [
+                'list_id' => $lista->list_id,
+                'list_fkgroup' => $lista->list_fkgroup,
+                'person' => $lista->listFkperson->completo,
+            ];
+        }
+        return $result;
+    } else {
+        return ['message' => 'No se encontraron listas para el grupo proporcionado'];
+    }
+}
+
+
+
+public function actionListasp($id = null)
+{
+    $listas = Listg::find()->joinWith(['listFkgroup', 'listFkperson']);
+
+    // Filtra por el ID del grupo si se proporciona
+    if ($id !== null) {
+        $listas = $listas->andWhere(['listFkperson' => $id]);
     }
 
     $dataProvider = new \yii\data\ActiveDataProvider([
@@ -153,6 +186,30 @@ public function  actionGruposp($id=null){
 
 
 public function actionListatodos($id = null)
+{
+    // Busca todos los códigos que pertenecen al grupo
+    $lista = Listg::find()
+        ->where(['list_fkgroup' => $id])
+        ->all();
+
+    // Verifica si se encontraron códigos
+    if (!empty($lista)) {
+        $result = [];
+        foreach ($lista as $item) {
+            $result[] = [
+                'list_fkgroup' => $item->list_id,
+                'person' => $item->listFkperson->completo,
+            ];
+        }
+        return $result;
+    } else {
+        // Manejar la situación en la que no se encontraron códigos
+        return ['message' => 'No se encontraron códigos para el grupo proporcionado'];
+    }
+}
+
+
+public function actionContar($id = null)
 {
     // Busca todos los códigos que pertenecen al grupo
     $lista = Listg::find()
