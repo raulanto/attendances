@@ -139,6 +139,8 @@ public function  actionGruposp($id=null){
             $result[] = [
                 'list_id' => $lista->list_id,
                 'listFkgroup' => $lista->listFkgroup,
+                'subject' => $lista->listFkgroup->groFksubject->sub_name,
+                'classroom' => $lista->listFkgroup->groFkclassroom->clas_name,
                 'person' => $lista->listFkperson->completo,
 
             ];
