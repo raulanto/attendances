@@ -48,10 +48,17 @@ class TeacherController extends ActiveController
         $token = '';
         $model = new LoginForm();
         $model->load(Yii::$app->getRequest()->getBodyParams(), '');
+        $id = 0;
         if($model->login()) {
-            $token = User::findOne(['username' => $model->username])->auth_key;
+            $token = User::findOne(['username' => $model->username]);
+            if(isset($token)){
+                $teacher = Teacher::findOne(['tea_fkuser' => $token->id]);
+                if(isset($teacher)){
+                    $id = $teacher->tea_id;
+                }
+            }
         }
-        return $token;
+        return ['token' => $token->auth_key, 'id' => $id];
     }
     //registrar
     public function actionRegistrar() { 
@@ -72,6 +79,7 @@ class TeacherController extends ActiveController
             $teacher->tea_mail = $model->tea_mail;
             $teacher->tea_phone = $model->tea_phone;
             $teacher->tea_fkdegree = $model->tea_fkdegree;
+            $teacher->tea_fkuser = $user->id;
             
             if($teacher->save()) {
                 $token = $user->auth_key;
