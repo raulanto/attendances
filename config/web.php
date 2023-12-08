@@ -28,10 +28,10 @@ $config = [
             'enableAutoLogin' => true,
             'enableSession'   => false,
             'loginUrl'        => null,
-            // 'class' => 'webvimark\modules\UserManagement\components\UserConfig',
-            // 'on afterLogin' => function ($event) {
-            //     \webvimark\modules\UserManagement\models\UserVisitLog::newVisitor($event->identity->id);
-            // }
+             'class' => 'webvimark\modules\UserManagement\components\UserConfig',
+             'on afterLogin' => function ($event) {
+                 \webvimark\modules\UserManagement\models\UserVisitLog::newVisitor($event->identity->id);
+             }
         ],
         'errorHandler' => [
             'errorAction' => 'site/error',
@@ -65,8 +65,10 @@ $config = [
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'code', 'pluralize' => false],
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'degree', 'pluralize' => false],
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'extracurricular', 'pluralize' => false],
-                ['class' => 'yii\rest\UrlRule', 'controller' => 'extra-person', 'pluralize' => false],
+                ['class' => 'yii\rest\UrlRule', 'controller' => 'extra-group', 'pluralize' => false],
+
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'grade', 'pluralize' => false],
+                ['class' => 'yii\rest\UrlRule', 'controller' => 'grade-person', 'pluralize' => false],
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'person', 'pluralize' => false],
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'question', 'pluralize' => false],
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'tag', 'pluralize' => false],
@@ -78,6 +80,87 @@ $config = [
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'subject', 'pluralize' => false],
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'major', 'pluralize' => false],
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'subject-major', 'pluralize' => false],
+
+                ['class' => 'yii\web\UrlRule', 'pattern' => 'extracurricular/buscar/<text:.*>', 'route' => 'extracurricular/buscar'],
+                ['class' => 'yii\web\UrlRule', 'pattern' => 'extracurricular/total/<text:.*>', 'route' => 'extracurricular/total'],
+                ['class' => 'yii\web\UrlRule', 'pattern' => 'extracurricular/buscar-todos/<text:.*>', 'route' => 'extracurricular/buscar-todos'],
+
+                [
+                    'class' => 'yii\web\UrlRule',
+                    'pattern' => 'extra-group/extragroups/<id:\d+>',
+                    'route' => 'extra-group/extragroups',
+                    'defaults' => ['text' => null],
+                ],
+                [
+                    'class' => 'yii\web\UrlRule',
+                    'pattern' => 'extra-group/buscar/<text:\w+>',
+                    'route' => 'extra-group/buscar',
+                ],
+                [
+                    'class' => 'yii\web\UrlRule', 
+                    'pattern' => 'grade/buscar', 
+                    'route' => 'grade/buscar'
+                ],                
+                ['class' => 'yii\web\UrlRule', 'pattern' => 'grade/total/<text:.*>', 'route' => 'grade/total'],
+
+                [
+                    'class'      => 'yii\rest\UrlRule',
+                    'controller' => 'extragroup',
+                    'tokens' => [
+                        '{id}'        => '<id:\\d[\\d,]*>'
+                    ],
+                    'extraPatterns' => [
+                        'GET extragroups/{id}' => 'extragroups'
+                    ],
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'grade',
+                    'tokens' => [
+                        '{id}' => '<id:\\d[\\d,]*>',
+                    ],
+                    'extraPatterns' => [
+                        'GET grades/{id}' => 'grades',
+                    ],
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'grade',
+                    'tokens' => [
+                        '{id}' => '<id:\d[\\d,]*>',
+                        '{text}' => '<text:\w+>'
+                    ],
+                    'extraPatterns' => [
+                        'GET buscar/{text}' => 'buscar',
+                        'GET total/{text}' => 'total',
+                    ],
+                ],
+                //MOD----------
+                [
+                    'class'      => 'yii\rest\UrlRule',
+                    'controller' => 'extracurricular',
+                    'tokens' => [
+                        '{id}'        => '<id:\\d[\\d,]*>',
+                        '{text}' => '<text:\\w+>'
+                    ],
+                    'extraPatterns' => [
+                        'GET buscar/{text}' => 'buscar',
+                        'GET total' => 'id',
+                        'GET buscar-todos' => 'buscar-todos',
+                    ],
+                ],
+                [
+                    'class'      => 'yii\rest\UrlRule',
+                    'controller' => 'grade-person',
+                    'tokens' => [
+                        '{id}'        => '<id:\\d[\\d,]*>'
+                    ],
+                    'extraPatterns' => [
+                        'GET gradesp/{id}' => 'gradesp'
+                    ],
+                ],
+
+
                 //reglas para buscar total
                 [
                     'class' => 'yii\web\UrlRule',

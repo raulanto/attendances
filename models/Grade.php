@@ -9,15 +9,12 @@ use Yii;
  *
  * @property int $gra_id
  * @property string $gra_type
- * @property float $gra_score
  * @property string $gra_date
  * @property string $gra_time
- * @property string $gra_commit
  * @property int $gra_fkgroup
- * @property int $gra_fkperson
  *
  * @property Group $graFkgroup
- * @property Person $graFkperson
+ * @property GradePerson[] $gradePeople
  */
 class Grade extends \yii\db\ActiveRecord
 {
@@ -35,14 +32,11 @@ class Grade extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['gra_type', 'gra_score', 'gra_date', 'gra_time', 'gra_commit', 'gra_fkgroup', 'gra_fkperson'], 'required'],
-            [['gra_score'], 'number'],
+            [['gra_type', 'gra_date', 'gra_time', 'gra_fkgroup'], 'required'], //MOOOOD-------------------
             [['gra_date', 'gra_time'], 'safe'],
-            [['gra_commit'], 'string'],
-            [['gra_fkgroup', 'gra_fkperson'], 'integer'],
+            [['gra_fkgroup'], 'integer'], //MOOOOD-------------------
             [['gra_type'], 'string', 'max' => 50],
             [['gra_fkgroup'], 'exist', 'skipOnError' => true, 'targetClass' => Group::class, 'targetAttribute' => ['gra_fkgroup' => 'gro_id']],
-            [['gra_fkperson'], 'exist', 'skipOnError' => true, 'targetClass' => Person::class, 'targetAttribute' => ['gra_fkperson' => 'per_id']],
         ];
     }
 
@@ -54,12 +48,9 @@ class Grade extends \yii\db\ActiveRecord
         return [
             'gra_id' => 'Gra ID',
             'gra_type' => 'Gra Type',
-            'gra_score' => 'Gra Score',
             'gra_date' => 'Gra Date',
             'gra_time' => 'Gra Time',
-            'gra_commit' => 'Gra Commit',
             'gra_fkgroup' => 'Gra Fkgroup',
-            'gra_fkperson' => 'Gra Fkperson',
         ];
     }
 
@@ -74,20 +65,17 @@ class Grade extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[GraFkperson]].
+     * Gets query for [[GradePeople]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getGraFkperson()
+    public function getGradePeople() //MOOOOD-------------------
     {
-        return $this->hasOne(Person::class, ['per_id' => 'gra_fkperson']);
+        return $this->hasMany(GradePerson::class, ['graper_fkgrade' => 'gra_id']); //MOOOOD-------------------
     }
 
     public function extraFields(){
         return[
-            'person' => function($item){
-                return $item->graFkperson->per_name;
-            },
             'group' => function($item){
                 return $item->graFkgroup->gro_code;
             }

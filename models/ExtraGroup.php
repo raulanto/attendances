@@ -77,6 +77,23 @@ class ExtraGroup extends \yii\db\ActiveRecord
             'extracurricular' => function($item){
                 return $item->extgroFkextracurricular->ext_name;
             },
+            //MOOOOD-------------------
+            'date' => function($item){
+                return $item->extgroFkextracurricular->ext_date;
+            },
+            'time' => function($item){
+                return "{$item->extgroFkextracurricular->ext_opening} - {$item->extgroFkextracurricular->ext_closing}";
+            },
+            'description' => function($item){
+                return $item->extgroFkextracurricular->ext_description;
+            },
+            'place' => function($item){
+                return $item->extgroFkextracurricular->ext_place;
+            },
+            'code' => function($item){
+                return $item->extgroFkextracurricular->ext_code;
+            },
+            //MOOOOD-------------------
             'group' => function($item){
                 return $item->extgroFkgroup->gro_code;
             }
