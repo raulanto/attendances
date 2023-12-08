@@ -33,7 +33,7 @@ class ListgController extends ActiveController
             'authMethods' => [
                 HttpBearerAuth::className(),
             ],
-            'except' => ['index', 'view', 'listas','buscar','total','gruposp','listatodos','listasp']
+            'except' => ['index', 'view', 'listas','buscar','total','gruposp','listatodos','listasp','contar']
         ];
     
         return $behaviors;

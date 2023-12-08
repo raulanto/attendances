@@ -113,8 +113,7 @@ $config = [
                     'extraPatterns' => [
                         'GET listas/{id}' => 'listas',
                         'GET grupop/{id}' => 'grupop',
-                        'GET grupop/{id}' => 'grupop'
-
+                        'GET contar/{id}' => 'contar'
                     ],
                 ],
                 //Regla que trae el detalle de asistencia de un cierto fklist 
