@@ -30,7 +30,7 @@ class ExtracurricularController extends ActiveController
             'authMethods' => [
                 HttpBearerAuth::className(),
             ],
-            'except' => ['index', 'view', 'buscar'] 
+            'except' => ['index', 'view', 'buscar', 'buscar-todos'] 
         ];
     
         return $behaviors;
@@ -60,5 +60,12 @@ class ExtracurricularController extends ActiveController
         }
         $total = $total->count();
         return $total;
+    }
+
+    public function actionBuscarTodos()
+    {
+        $todosLosRegistros = Extracurricular::find()->all();
+    
+        return $todosLosRegistros;
     }
 }
