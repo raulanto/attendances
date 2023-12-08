@@ -215,24 +215,13 @@ public function actionContar($id = null)
 {
     // Busca todos los códigos que pertenecen al grupo
     $lista = Listg::find()
-        ->where(['list_fkgroup' => $id])
+        ->where(['list_fkperson' => $id])
         ->all();
 
-    // Verifica si se encontraron códigos
-    if (!empty($lista)) {
-        $result = [];
-        foreach ($lista as $item) {
-            $result[] = [
-                'list_fkgroup' => $item->list_id,
-                'person' => $item->listFkperson->completo,
-            ];
-        }
+        $total = $lista->count();
         return $result;
-    } else {
-        // Manejar la situación en la que no se encontraron códigos
-        return ['message' => 'No se encontraron códigos para el grupo proporcionado'];
-    }
 }
+
 
 
 
