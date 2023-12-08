@@ -70,6 +70,7 @@ class PersonController extends ActiveController
         $user->password = $model->password;
         $user->status = User::STATUS_ACTIVE;
         $user->email_confirmed = 1;
+        $user->superadmin=0;
         if($user->save()) {
             $user->username = $model->username;
             $person->per_name = $model->per_name;
@@ -86,7 +87,7 @@ class PersonController extends ActiveController
         } else {
             return $user;
         }
-        return ['token'=>$token,'user'=>$person->per_id];
+        return ['token'=>$token,'user'=>$person->per_id,'tipo'=>$user->superadmin];
     }
 
 

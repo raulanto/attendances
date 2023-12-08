@@ -80,6 +80,7 @@ class TeacherController extends ActiveController
             $teacher->tea_phone = $model->tea_phone;
             $teacher->tea_fkdegree = $model->tea_fkdegree;
             $teacher->tea_fkuser = $user->id;
+            $user->superadmin=1;
             if($teacher->save()) {
                 $token = $user->auth_key;
             }else{
@@ -88,6 +89,6 @@ class TeacherController extends ActiveController
         } else {
             return $user;
         }
-        return ['token'=>$token,'user'=>$teacher->tea_id];
+        return ['token'=>$token,'user'=>$teacher->tea_id,'tipo'=> $user->superadmin];
     }
 }
