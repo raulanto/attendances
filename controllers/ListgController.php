@@ -213,16 +213,13 @@ public function actionListatodos($id = null)
 
 public function actionContar($id = null)
 {
-    // Busca todos los códigos que pertenecen al grupo
-    $lista = Listg::find()
-        ->where(['list_fkperson' => $id])
-        ->all();
+    $total = Listg::find()->joinWith(['listFkgroup', 'listFkperson']);
+    if ($id !== null) {
+        $total = $total->Where(['list_fkperson' => $id]);
+    }
 
-        $total = $lista->count();
-        return $result;
+    $total = $total->count();
+    return $total;
 }
-
-
-
 
 }
