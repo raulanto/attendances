@@ -476,6 +476,21 @@ $config = [
                         'GET buscar-todos' => 'buscar-todos',
                     ],
                 ],
+
+                //Grade-persone regla
+
+                [
+                    'class'      => 'yii\rest\UrlRule',
+                    'controller' => 'grade-person',
+                    'tokens' => [
+                        '{id}'        => '<id:\\d[\\d,]*>'
+                    ],
+                    'extraPatterns' => [
+                        'GET gradesp/{id}' => 'gradesp'
+                    ],
+                ],
+
+
                 
         
 
