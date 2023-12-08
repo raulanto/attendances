@@ -13,18 +13,19 @@ class RegistroFrom extends Model
     public $tea_fkdegree;
     public $tea_mail;
     public $tea_phone;
-
+    public $tea_fkuser;
     
     public function rules() 
     {
         return [
             ['username', 'unique'],
             [['username', 'password','tea_name', 'tea_paternal', 'tea_maternal', 'tea_mail', 'tea_phone', 'tea_fkdegree'], 'required'],
-            [['tea_fkdegree'], 'integer'],
+            [['tea_fkdegree','tea_fkuser'], 'integer'],
             [['tea_name', 'tea_paternal', 'tea_maternal'], 'string', 'max' => 50],
             [['tea_mail'], 'string', 'max' => 100],
             [['tea_phone'], 'string', 'max' => 10],
             [['tea_fkdegree'], 'exist', 'skipOnError' => true, 'targetClass' => Degree::class, 'targetAttribute' => ['tea_fkdegree' => 'deg_id']],
+            [['tea_fkuser'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['tea_fkuser' => 'id']],
         ];
     }
 }

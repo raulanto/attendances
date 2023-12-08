@@ -6,7 +6,7 @@ use yii\filters\auth\CompositeAuth;
 use yii\filters\auth\HttpBearerAuth;
 use app\models\Attendance;
 use app\models\Code;
-use app\models\RegistroAttendanceFrom;
+
 class AttendanceController extends ActiveController
 {
     public function behaviors()
@@ -31,7 +31,7 @@ class AttendanceController extends ActiveController
             'authMethods' => [
                 HttpBearerAuth::className(),
             ],
-            'except' => ['index', 'view','asistencias','guardar']
+            'except' => ['index', 'view','asistencias','guardar','total']
         ];
     
         return $behaviors;
@@ -65,51 +65,69 @@ class AttendanceController extends ActiveController
             return ['message' => 'No se encontraron asistencias para el ID proporcionado'];
         }
     }
-    public function actionGuardar( $fkList, $commit)
+    public function actionGuardar( $codigo,$fkList, $commit)
     {
-        $model->load(Yii::$app->getRequest()->getBodyParams(), '');
-        $code = Code::findOne(['cod_code' => $model->$codigo]);
+            // Verificar si ya existe una asistencia para fk_list y código específicos
+    $existingAttendance = Attendance::findOne(['att_fklist' => $fkList, 'att_fkcode' => $codigo]);
 
-        $existingAttendance = Attendance::findOne(['att_fklist' => $model->$fkList, 'att_fkcode' => $code->cod_id]);
+    if ($existingAttendance !== null) {
+        return 'Ya existe una asistencia registrada para el fk_list proporcionado y el código.';
+    }
 
-        if ($existingAttendance !== null) {
-            return ['error' => 'Ya existe una asistencia registrada para el fk_list proporcionado y el código.'];
-        }
-        if ($code !== null) {
+    // Buscar el código en la tabla Code
+    $code = Code::findOne(['cod_code' => $codigo]);
 
-            $duracion = $code->cod_duration;
-            $fechaGeneracion = strtotime($code->cod_date . ' ' . $code->cod_time);
+    // Verificar si el código existe
+    if ($code !== null) {
+        // Obtener la duración, la fecha y la hora del código
+        $duracion = $code->cod_duration;
+        $fechaGeneracion = strtotime($code->cod_date . ' ' . $code->cod_time);
 
-            $tiempoActual = time();
-            $tiempoPermitido = $fechaGeneracion + ($duracion * 60); // Convertir duración a segundos
+        // Verificar si ha pasado el tiempo permitido desde la generación del código
+        $tiempoActual = time();
+        $tiempoPermitido = $fechaGeneracion + ($duracion * 60); // Convertir duración a segundos
 
-            if ($tiempoActual <= $tiempoPermitido) {
+        if ($tiempoActual <= $tiempoPermitido) {
+            // Guardar la asistencia con fk_list y commit
+            $asistencia = new Attendance();
+            $asistencia->att_fkcode = $code->cod_id;
+            $asistencia->att_fklist = $fkList;
+            $asistencia->att_date = date('Y-m-d');
+            $asistencia->att_time = date('H:i:s');
+            $asistencia->att_commit = $commit;
 
-                $asistencia = new Attendance();
-                $asistencia->att_fkcode = $code->cod_id;
-                $asistencia->att_fklist = $fkList;
-                $asistencia->att_date = date('Y-m-d');
-                $asistencia->att_time = date('H:i:s');
-                $asistencia->att_commit = $model->$commit;
-
-                if ($asistencia->save()) {
-                    // Devolver la información requerida
-                    return [
-                        'id' => $code->cod_id,
-                        'duracion' => $duracion,
-                        'tiempoGeneracion' => $fechaGeneracion,
-                        'fk_list' => $fkList,
-                        'commit' => $model->$commit,
-                    ];
-                } else {
-                    return ['error' => 'Error al guardar la asistencia. Detalles: ' . json_encode($asistencia->errors)];
-                }
+            if ($asistencia->save()) {
+                // Devolver la información requerida
+                return [
+                    'id' => $code->cod_id,
+                    'duracion' => $duracion,
+                    'tiempoGeneracion' => $fechaGeneracion,
+                    'fk_list' => $fkList,
+                    'commit' => $commit,
+                ];
             } else {
-                return ['error' => 'No se puede registrar la asistencia. Ha pasado el tiempo permitido.'];
+                return  'Error al guardar la asistencia. Detalles: ' . json_encode($asistencia->errors);
             }
         } else {
-            return ['error' => 'Código no encontrado en la tabla Code.'];
+            return  'No se puede registrar la asistencia. Ha pasado el tiempo permitido.';
         }
+    } else {
+        return  'Código no encontrado.';
+    }
+}
+
+
+    public function actionTotal($att_fkcode)
+    {
+        $totalAttendance = Attendance::find();
+    
+        if ($att_fkcode !== null) {
+            $totalAttendance = $totalAttendance->andWhere(['att_fkcode' => $att_fkcode]);
+        }
+    
+        $totalAttendance = $totalAttendance->count();
+    
+        return $totalAttendance;
     }
 
     

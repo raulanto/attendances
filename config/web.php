@@ -28,10 +28,10 @@ $config = [
             'enableAutoLogin' => true,
             'enableSession'   => false,
             'loginUrl'        => null,
-            'class' => 'webvimark\modules\UserManagement\components\UserConfig',
-            'on afterLogin' => function ($event) {
-                \webvimark\modules\UserManagement\models\UserVisitLog::newVisitor($event->identity->id);
-            }
+            // 'class' => 'webvimark\modules\UserManagement\components\UserConfig',
+            // 'on afterLogin' => function ($event) {
+            //     \webvimark\modules\UserManagement\models\UserVisitLog::newVisitor($event->identity->id);
+            // }
         ],
         'errorHandler' => [
             'errorAction' => 'site/error',
@@ -144,13 +144,18 @@ $config = [
                 ],
                 ['class' => 'yii\web\UrlRule', 'pattern' => 'library/total/<text:[\w\-]+>/<id:\d+>', 'route' => 'library/total'],
                 //buscar total question
+                 [
+                    'class' => 'yii\web\UrlRule',
+                    'pattern' => 'question/total/<text:[\w\-]+>/<id:\d+>',
+                    'route' => 'question/total'
+                ],
                 [
                     'class' => 'yii\web\UrlRule',
                     'pattern' => 'question/buscar/<text:[\w\-]+>/<id:\d+>',
                     'route' => 'question/buscar',
                     'defaults' => ['id' => null],
                 ],
-                ['class' => 'yii\web\UrlRule', 'pattern' => 'question/total/<text:[\w\-]+>/<id:\d+>', 'route' => 'question/total'],
+
                 //Regla para la funcion que trae la lista de un cierto grupo
                 [
                     'class'      => 'yii\rest\UrlRule',
@@ -159,7 +164,9 @@ $config = [
                         '{id}'        => '<id:\\d[\\d,]*>'
                     ],
                     'extraPatterns' => [
-                        'GET listas/{id}' => 'listas'
+                        'GET listas/{id}' => 'listas',
+                        'GET grupop/{id}' => 'grupop',
+                        'GET contar/{id}' => 'contar'
                     ],
                 ],
                 //Regla que trae el detalle de asistencia de un cierto fklist 
@@ -167,13 +174,17 @@ $config = [
                     'class'      => 'yii\rest\UrlRule',
                     'controller' => 'attendance',
                     'tokens' => [
-                        '{id}'        => '<id:\\d[\\d,]*>'
+                        '{id}'        => '<id:\\d[\\d,]*>',
+                        '{text}' => '<text:\w+>',
+                        '{text}' => '<text:\w+>',
                     ],
                     'extraPatterns' => [
                         'GET asistencias/{id}' => 'asistencias',
-                        'POST guardar' => 'guardar'
+                        'POST guardar/{text}/{id}/{text}' => 'guardar',
+                        'GET total/{id}' => 'total'
                     ],
                 ],
+
                 //Regla para traer todos los codigos de un grupo especifico
                 [
                     'class'      => 'yii\rest\UrlRule',
@@ -184,7 +195,8 @@ $config = [
                     ],
                     'extraPatterns' => [
                         'GET codigos/{id}' => 'codigos',
-                        'POST generar' => 'generar'
+                        'POST generar' => 'generar',
+                        'PUT update' => 'update'
                     ],
                 ],
                 //Regla para traer todos los archivos de un grupo especifico

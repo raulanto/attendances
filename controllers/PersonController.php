@@ -47,10 +47,17 @@ class PersonController extends ActiveController
         $token = '';
         $model = new LoginForm();
         $model->load(Yii::$app->getRequest()->getBodyParams(), '');
+        $id = 0;
         if($model->login()) {
-            $token = User::findOne(['username' => $model->username])->auth_key;
+            $token = User::findOne(['username' => $model->username]);
+            if(isset($token)){
+                $person = Person::findOne(['per_fkuser' => $token->id]);
+                if(isset($person)){
+                    $id = $person->per_id;
+                }
+            }
         }
-        return $token;
+        return ['token' => $token->auth_key, 'id' => $id];
     }
 
     public function actionRegistrar() { 
@@ -70,6 +77,7 @@ class PersonController extends ActiveController
             $person->per_maternal = $model->per_maternal;
             $person->per_mail = $model->per_mail;
             $person->per_phone = $model->per_phone;
+            $person->per_fkuser = $user->id;
 
             
             if($person->save()) {
@@ -78,22 +86,9 @@ class PersonController extends ActiveController
         } else {
             return $user;
         }
-        return $token;
+        return ['token'=>$token,'user'=>$person->per_id];
     }
 
-    private function generarCodigoUnico()
-{
-    $caracteresPermitidos = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    $longitudCodigo = 10;
-    
-    $codigoUnico = '';
-    $caracteresPermitidosLength = strlen($caracteresPermitidos);
 
-    for ($i = 0; $i < $longitudCodigo; $i++) {
-        $codigoUnico .= $caracteresPermitidos[rand(0, $caracteresPermitidosLength - 1)];
-    }
-
-    return $codigoUnico;
-}
 
 }

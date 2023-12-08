@@ -48,10 +48,17 @@ class TeacherController extends ActiveController
         $token = '';
         $model = new LoginForm();
         $model->load(Yii::$app->getRequest()->getBodyParams(), '');
+        $id = 0;
         if($model->login()) {
-            $token = User::findOne(['username' => $model->username])->auth_key;
+            $token = User::findOne(['username' => $model->username]);
+            if(isset($token)){
+                $teacher = Teacher::findOne(['tea_fkuser' => $token->id]);
+                if(isset($teacher)){
+                    $id = $teacher->tea_id;
+                }
+            }
         }
-        return $token;
+        return ['token' => $token->auth_key, 'id' => $id];
     }
     //registrar
     public function actionRegistrar() { 
@@ -65,20 +72,22 @@ class TeacherController extends ActiveController
         $user->status = User::STATUS_ACTIVE;
         $user->email_confirmed = 1;
         if($user->save()) {
-            $user->username = $model->username;
+            $teacher->tea_fkuser = $user->id;          
             $teacher->tea_name = $model->tea_name;
             $teacher->tea_paternal = $model->tea_paternal;
             $teacher->tea_maternal = $model->tea_maternal;
             $teacher->tea_mail = $model->tea_mail;
             $teacher->tea_phone = $model->tea_phone;
             $teacher->tea_fkdegree = $model->tea_fkdegree;
-            
+            $teacher->tea_fkuser = $user->id;
             if($teacher->save()) {
                 $token = $user->auth_key;
+            }else{
+                return "maestro no creado";
             }
         } else {
             return $user;
         }
-        return $token;
+        return ['token'=>$token,'user'=>$teacher->tea_id];
     }
 }

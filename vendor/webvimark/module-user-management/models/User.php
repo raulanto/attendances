@@ -417,4 +417,6 @@ class User extends UserIdentity
 
 		return parent::beforeDelete();
 	}
+
+	
 }
