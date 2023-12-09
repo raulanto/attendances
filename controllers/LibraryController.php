@@ -51,7 +51,7 @@ class LibraryController extends ActiveController
         if ($text !== '') {
             $libraries = $libraries
                 ->andWhere(['like', new \yii\db\Expression(
-                    "CONCAT(lib_id, ' ', lib_fkgroup, ' ', lib_type, ' ', lib_title)"), $text]);
+                    "CONCAT(lib_id, ' ', lib_fkgroup, ' ', lib_file, ' ', lib_type, ' ', lib_title)"), $text]);
         }
     
         $dataProvider = new \yii\data\ActiveDataProvider([
@@ -70,6 +70,7 @@ class LibraryController extends ActiveController
                     'lib_fkgroup'   => $library->lib_fkgroup,
                     'lib_type'      => $library->lib_type,
                     'lib_title'     => $library->lib_title,
+                    'lib_file'     => $library->lib_file,                    
                 ];
             }
             return $result;
@@ -89,7 +90,7 @@ class LibraryController extends ActiveController
         if ($text !== '') {
             $libraries = $libraries
                 ->andWhere(['like', new \yii\db\Expression(
-                    "CONCAT(lib_id, ' ', lib_fkgroup, ' ', lib_type, ' ', lib_title)"), $text]);
+                    "CONCAT(lib_id, ' ', lib_fkgroup, ' ', lib_type, ' ', lib_file, ' ', lib_title)"), $text]);
         }
     
         $dataProvider = new \yii\data\ActiveDataProvider([
@@ -113,7 +114,7 @@ class LibraryController extends ActiveController
         if ($text !== '') {
             $total = $total
                 ->andWhere(['like', new \yii\db\Expression(
-                    "CONCAT(lib_id, ' ', lib_fkgroup, ' ', lib_type, ' ', lib_title)"), $text]);
+                    "CONCAT(lib_id, ' ', lib_fkgroup, ' ', lib_type, ' ', lib_file, ' ', lib_title)"), $text]);
         }
     
         $total = $total->count();
