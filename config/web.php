@@ -28,10 +28,10 @@ $config = [
             'enableAutoLogin' => true,
             'enableSession'   => false,
             'loginUrl'        => null,
-             'class' => 'webvimark\modules\UserManagement\components\UserConfig',
-             'on afterLogin' => function ($event) {
-                 \webvimark\modules\UserManagement\models\UserVisitLog::newVisitor($event->identity->id);
-             }
+            //  'class' => 'webvimark\modules\UserManagement\components\UserConfig',
+            //  'on afterLogin' => function ($event) {
+            //      \webvimark\modules\UserManagement\models\UserVisitLog::newVisitor($event->identity->id);
+            //  }
         ],
         'errorHandler' => [
             'errorAction' => 'site/error',

@@ -30,7 +30,7 @@ class ExtraGroupController extends ActiveController
             'authMethods' => [
                 HttpBearerAuth::className(),
             ],
-            'except' => ['index', 'view', 'extragroups', 'total', 'buscar']
+            'except' => ['index', 'view', 'extragroups', 'total', 'buscar', 'delete']
         ];
     
         return $behaviors;

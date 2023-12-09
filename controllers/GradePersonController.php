@@ -31,7 +31,7 @@ class GradePersonController extends ActiveController
             'authMethods' => [
                 HttpBearerAuth::className(),
             ],
-            'except' => ['index', 'view', 'gradesp']
+            'except' => ['index', 'view', 'gradesp', 'post', 'delete', 'put']
         ];
     
         return $behaviors;
