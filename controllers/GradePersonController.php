@@ -1,5 +1,6 @@
 <?php
 namespace app\controllers;
+use Yii;
 
 use yii\rest\ActiveController;
 use yii\filters\auth\CompositeAuth;
@@ -31,7 +32,7 @@ class GradePersonController extends ActiveController
             'authMethods' => [
                 HttpBearerAuth::className(),
             ],
-            'except' => ['index', 'view', 'gradesp']
+            'except' => ['index', 'view', 'gradesp','guardar']
         ];
     
         return $behaviors;
@@ -64,4 +65,21 @@ class GradePersonController extends ActiveController
         return ['message' => 'No se encontraron calificaciones para la tarea asignada'];
     }
 }
+
+
+public function actionGuardar()
+{
+    $model = new GradePerson();
+    $model->load(Yii::$app->getRequest()->getBodyParams(), '');
+
+    if ($model->save()) {
+        return $model;
+    } else {
+        return [($model->errors)];
+    }
+}
+
+
+
+
 }

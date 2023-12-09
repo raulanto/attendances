@@ -356,6 +356,19 @@ $config = [
 
                     ],
                 ],
+                //Regla para gradeperson
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'grade-person',
+                    'tokens' => [
+                        '{id}' => '<id:\d[\\d,]*>',
+                        '{text}' => '<text:\w+>'
+                    ],
+                    'extraPatterns' => [
+                        'POST guardar' => 'guardar',
+
+                    ],
+                ],
                 
             ],
         ]
