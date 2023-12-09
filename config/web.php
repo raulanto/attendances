@@ -81,6 +81,7 @@ $config = [
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'major', 'pluralize' => false],
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'subject-major', 'pluralize' => false],
 
+                //REGLAS DE KRYSS
                 ['class' => 'yii\web\UrlRule', 'pattern' => 'extracurricular/buscar/<text:.*>', 'route' => 'extracurricular/buscar'],
                 ['class' => 'yii\web\UrlRule', 'pattern' => 'extracurricular/total/<text:.*>', 'route' => 'extracurricular/total'],
                 ['class' => 'yii\web\UrlRule', 'pattern' => 'extracurricular/buscar-todos/<text:.*>', 'route' => 'extracurricular/buscar-todos'],
@@ -160,15 +161,15 @@ $config = [
                     ],
                 ],
 
-
-                //reglas para buscar total
+                //REGLAS DE MONICA
+                //buscar total classroom
                 [
-                    'class' => 'yii\web\UrlRule',
-                    'pattern' => 'listg/buscar/<text:[\w\-]+>/<id:\d+>',
-                    'route' => 'listg/buscar',
-                    'defaults' => ['id' => null],
+                    'class' => 'yii\web\UrlRule', 
+                    'pattern' => 'classroom/buscar/<text:.*>', 
+                    'route' => 'classroom/buscar'
                 ],
-                ['class' => 'yii\web\UrlRule', 'pattern' => 'listg/total/<text:[\w\-]+>/<id:\d+>', 'route' => 'listg/total'],
+                ['class' => 'yii\web\UrlRule', 'pattern' => 'classroom/total/<text:.*>', 'route' => 'classroom/total'],
+
                 //buscar total library
                 [
                     'class' => 'yii\web\UrlRule',
@@ -177,18 +178,65 @@ $config = [
                     'defaults' => ['id' => null],
                 ],
                 ['class' => 'yii\web\UrlRule', 'pattern' => 'library/total/<text:[\w\-]+>/<id:\d+>', 'route' => 'library/total'],
-                //buscar total question
-                 [
-                    'class' => 'yii\web\UrlRule',
-                    'pattern' => 'question/total/<text:[\w\-]+>/<id:\d+>',
-                    'route' => 'question/total'
+                //Regla para traer todos los archivos de un grupo especifico
+                [
+                    'class'      => 'yii\rest\UrlRule',
+                    'controller' => 'library',
+                    'tokens' => [
+                        '{id}'        => '<id:\\d[\\d,]*>'
+                    ],
+                    'extraPatterns' => [
+                        'GET librarys/{id}' => 'librarys'
+                    ],
                 ],
+                //Regla para buscar en classroom
+                [
+                    'class'      => 'yii\rest\UrlRule',
+                    'controller' => 'classroom',
+                    'tokens' => [
+                        '{id}'        => '<id:\\d[\\d,]*>',
+                        '{text}'      => '<text:\\w+>'
+                    ],
+                    'extraPatterns' => [
+                        'GET buscar/{text}' => 'buscar',
+                        'GET total' => 'id',
+                    ],
+                ],   
+                //Regla para buscar en library
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'library',
+                    'tokens' => [
+                        '{id}' => '<id:\d[\\d,]*>',
+                        '{text}' => '<text:\w+>'
+                    ],
+                    'extraPatterns' => [
+                        'GET buscar/{text}' => 'buscar',
+                        'GET total/{text}' => 'total',
+                    ],
+                ],       
+                //Regla para traer todos los grupo de una persona especifico
+                [
+                    'class'      => 'yii\rest\UrlRule',
+                    'controller' => 'group',
+                    'tokens' => [
+                        '{id}'        => '<id:\\d[\\d,]*>',
+                        '{text}' => '<text:\w+>'
+                    ],
+                    'extraPatterns' => [
+                        'GET grupos/{id}' => 'grupos'
+                    ],
+                ],                                   
+
+                //REGLAS RAUL
+                //reglas para buscar total
                 [
                     'class' => 'yii\web\UrlRule',
-                    'pattern' => 'question/buscar/<text:[\w\-]+>/<id:\d+>',
-                    'route' => 'question/buscar',
+                    'pattern' => 'listg/buscar/<text:[\w\-]+>/<id:\d+>',
+                    'route' => 'listg/buscar',
                     'defaults' => ['id' => null],
                 ],
+                ['class' => 'yii\web\UrlRule', 'pattern' => 'listg/total/<text:[\w\-]+>/<id:\d+>', 'route' => 'listg/total'],
 
                 //Regla para la funcion que trae la lista de un cierto grupo
                 [
@@ -233,19 +281,7 @@ $config = [
                         'PUT update' => 'update'
                     ],
                 ],
-                //Regla para traer todos los archivos de un grupo especifico
-                [
-                    'class'      => 'yii\rest\UrlRule',
-                    'controller' => 'library',
-                    'tokens' => [
-                        '{id}'        => '<id:\\d[\\d,]*>',
-                        
 
-                    ],
-                    'extraPatterns' => [
-                        'GET librarys/{id}' => 'librarys'
-                    ],
-                ],
                 //Regla para buscar en listg
                 [
                     'class' => 'yii\rest\UrlRule',
@@ -261,35 +297,7 @@ $config = [
                         'GET listatodos/{text}' => 'listatodos'
                     ],
                 ],
-                //Regla para buscar en library
-                [
-                    'class' => 'yii\rest\UrlRule',
-                    'controller' => 'library',
-                    'tokens' => [
-                        '{id}' => '<id:\d[\\d,]*>',
-                        '{text}' => '<text:\w+>'
-                    ],
-                    'extraPatterns' => [
-                        'GET buscar/{text}' => 'buscar',
-                        'GET total/{text}' => 'total',
-                    ],
-                ],
-                //Regla para buscar en question
-                [
-                    'class' => 'yii\rest\UrlRule',
-                    'controller' => 'question',
-                    'tokens' => [
-                        '{id}' => '<id:\d[\\d,]*>',
-                        '{text}' => '<text:\w+>'
-                    ],
-                    'extraPatterns' => [
-                        'GET buscar/{text}' => 'buscar',
-                        'GET total/{text}' => 'total',
-                        'GET qmaestro/{text}' => 'qmaestro',
-                        'GET qperson/{text}' => 'qperson',
 
-                    ],
-                ],
                 //Regla para teacher
                 [
                     'class' => 'yii\rest\UrlRule',
@@ -316,16 +324,36 @@ $config = [
                         'POST registrar' => 'registrar',
                     ],
                 ],
-                //Regla para traer todos los grupo de una persona especifico
+
+
+                //REGLAS ARMANDO
+                //buscar total question
                 [
-                    'class'      => 'yii\rest\UrlRule',
-                    'controller' => 'group',
+                    'class' => 'yii\web\UrlRule',
+                    'pattern' => 'question/total/<text:[\w\-]+>/<id:\d+>',
+                    'route' => 'question/total'
+                ],
+                [
+                    'class' => 'yii\web\UrlRule',
+                    'pattern' => 'question/buscar/<text:[\w\-]+>/<id:\d+>',
+                    'route' => 'question/buscar',
+                    'defaults' => ['id' => null],
+                ],
+
+                //Regla para buscar en question
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'question',
                     'tokens' => [
-                        '{id}'        => '<id:\\d[\\d,]*>',
+                        '{id}' => '<id:\d[\\d,]*>',
                         '{text}' => '<text:\w+>'
                     ],
                     'extraPatterns' => [
-                        'GET grupos/{id}' => 'grupos'
+                        'GET buscar/{text}' => 'buscar',
+                        'GET total/{text}' => 'total',
+                        'GET qmaestro/{text}' => 'qmaestro',
+                        'GET qperson/{text}' => 'qperson',
+
                     ],
                 ],
                 
