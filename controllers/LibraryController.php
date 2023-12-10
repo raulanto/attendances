@@ -5,6 +5,7 @@ use yii\rest\ActiveController;
 use yii\filters\auth\CompositeAuth;
 use yii\filters\auth\HttpBearerAuth;
 use app\models\library;
+use Yii;
 
 class LibraryController extends ActiveController
 {
@@ -30,7 +31,7 @@ class LibraryController extends ActiveController
             'authMethods' => [
                 HttpBearerAuth::className(),
             ],
-            'except' => ['index', 'view' , 'librarys', 'buscar', 'total']
+            'except' => ['index', 'view' , 'librarys', 'buscar', 'total', 'delete', 'crear', 'modificar']
         ];
     
         return $behaviors;
@@ -119,6 +120,38 @@ class LibraryController extends ActiveController
     
         $total = $total->count();
         return $total;
+    }
+
+    public function actionCrear()
+    {
+        $postData = json_decode(file_get_contents('php://input'), true);
+    
+        $model = new Library();
+    
+        if ($postData && $model->load($postData, '') && $model->save()) {
+            return ['status' => 'success', 'message' => 'Registro creado exitosamente'];
+        } else {
+            return ['status' => 'error', 'message' => 'No se pudo crear el registro', 'errors' => $model->errors];
+        }
+    }
+
+    public function actionModificar($id)
+    {
+        $model = Library::findOne($id);
+
+        if (!$model) {
+            Yii::$app->response->statusCode = 404;
+            return ['status' => 'error', 'message' => 'El registro no fue encontrado'];
+        }
+
+        $model->attributes = Yii::$app->request->getBodyParams();
+
+        if ($model->save()) {
+            return ['status' => 'success', 'message' => 'Registro actualizado exitosamente'];
+        } else {
+            Yii::$app->response->statusCode = 400;
+            return ['status' => 'error', 'message' => 'No se pudo actualizar el registro', 'errors' => $model->errors];
+        }
     }
     
 
