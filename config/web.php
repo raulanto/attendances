@@ -24,10 +24,7 @@ $config = [
             'class' => 'yii\caching\FileCache',
         ],
         'user' => [
-            'identityClass'   => 'app\models\User',
-            'enableAutoLogin' => true,
-            'enableSession'   => false,
-            'loginUrl'        => null,
+
              'class' => 'webvimark\modules\UserManagement\components\UserConfig',
              'on afterLogin' => function ($event) {
                  \webvimark\modules\UserManagement\models\UserVisitLog::newVisitor($event->identity->id);
@@ -366,6 +363,7 @@ $config = [
                     ],
                     'extraPatterns' => [
                         'POST guardar' => 'guardar',
+                        'PUT editar' => 'editar',
 
                     ],
                 ],

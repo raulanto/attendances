@@ -30,7 +30,7 @@ class GradeController extends ActiveController
             'authMethods' => [
                 HttpBearerAuth::className(),
             ],
-            'except' => ['index', 'view', 'grades', 'buscar', 'total','guardar']
+            'except' => ['index', 'view', 'grades', 'buscar', 'total','guardar','editar']
         ];
     
         return $behaviors;
@@ -126,6 +126,8 @@ class GradeController extends ActiveController
         return [($model->errors)];
     }
 }
+
+
 
 
 }

@@ -32,7 +32,7 @@ class GradePersonController extends ActiveController
             'authMethods' => [
                 HttpBearerAuth::className(),
             ],
-            'except' => ['index', 'view', 'gradesp','guardar']
+            'except' => ['index', 'view', 'gradesp','guardar','editar']
         ];
     
         return $behaviors;
@@ -79,7 +79,29 @@ public function actionGuardar()
     }
 }
 
+public function actionEditar($graper_fkperson,$graper_commit,$graper_score)
+{
 
+    
+    
+    $model = GradePerson::findOne(['graper_fkperson' => $graper_fkperson]);
+    
+    if ($model === null) {
+        return ['error' => 'No se encontró la calificación para la persona con el ID proporcionado.'];
+    }
+    
+    $datos = new GradePerson();
+    $datos->load(Yii::$app->getRequest()->getBodyParams(), '');
+
+    $model->graper_commit = $graper_commit;
+    $model->graper_score = $graper_score;
+
+    if ($model->save()) {
+        return $model;
+    } else {
+        return ['error' => 'Error al editar la calificación. Detalles: ' . json_encode($model->errors)];
+    }
+}
 
 
 }
