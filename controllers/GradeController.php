@@ -5,6 +5,7 @@ use yii\rest\ActiveController;
 use yii\filters\auth\CompositeAuth;
 use yii\filters\auth\HttpBearerAuth;
 use app\models\Grade;
+use Yii;
 
 class GradeController extends ActiveController
 {
@@ -30,7 +31,8 @@ class GradeController extends ActiveController
             'authMethods' => [
                 HttpBearerAuth::className(),
             ],
-            'except' => ['index', 'view', 'grades', 'buscar', 'total','guardar','editar']
+            'except' => ['index', 'view', 'grades', 'buscar', 'total','guardar','editar','delete', 'modificar']
+
         ];
     
         return $behaviors;
@@ -130,4 +132,22 @@ class GradeController extends ActiveController
 
 
 
+    public function actionModificar($id)
+    {
+        $model =Grade::findOne($id);
+
+        if (!$model) {
+            Yii::$app->response->statusCode = 404;
+            return ['status' => 'error', 'message' => 'El registro no fue encontrado'];
+        }
+
+        $model->attributes = Yii::$app->request->getBodyParams();
+
+        if ($model->save()) {
+            return ['status' => 'success', 'message' => 'Registro actualizado exitosamente'];
+        } else {
+            Yii::$app->response->statusCode = 400;
+            return ['status' => 'error', 'message' => 'No se pudo actualizar el registro', 'errors' => $model->errors];
+        }
+    }
 }

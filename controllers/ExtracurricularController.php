@@ -5,6 +5,7 @@ use yii\rest\ActiveController;
 use yii\filters\auth\CompositeAuth;
 use yii\filters\auth\HttpBearerAuth;
 use app\models\Extracurricular; //MOD----------
+use Yii;
 
 class ExtracurricularController extends ActiveController
 {
@@ -30,7 +31,7 @@ class ExtracurricularController extends ActiveController
             'authMethods' => [
                 HttpBearerAuth::className(),
             ],
-            'except' => ['index', 'view', 'buscar', 'buscar-todos'] //MOD----------
+            'except' => ['index', 'view', 'buscar', 'total', 'buscar-todos', 'delete', 'crear', 'modificar'] //MOD----------
         ];
     
         return $behaviors;
@@ -67,6 +68,38 @@ class ExtracurricularController extends ActiveController
         $todosLosRegistros = Extracurricular::find()->all();
     
         return $todosLosRegistros;
+    }
+
+    public function actionCrear()
+    {
+        $postData = json_decode(file_get_contents('php://input'), true);
+    
+        $model = new Extracurricular();
+    
+        if ($postData && $model->load($postData, '') && $model->save()) {
+            return ['status' => 'success', 'message' => 'Registro creado exitosamente'];
+        } else {
+            return ['status' => 'error', 'message' => 'No se pudo crear el registro', 'errors' => $model->errors];
+        }
+    }
+
+    public function actionModificar($id)
+    {
+        $model = Extracurricular::findOne($id);
+
+        if (!$model) {
+            Yii::$app->response->statusCode = 404;
+            return ['status' => 'error', 'message' => 'El registro no fue encontrado'];
+        }
+
+        $model->attributes = Yii::$app->request->getBodyParams();
+
+        if ($model->save()) {
+            return ['status' => 'success', 'message' => 'Registro actualizado exitosamente'];
+        } else {
+            Yii::$app->response->statusCode = 400;
+            return ['status' => 'error', 'message' => 'No se pudo actualizar el registro', 'errors' => $model->errors];
+        }
     }
 }
 //MOD----------

@@ -157,6 +157,30 @@ $config = [
                         'GET gradesp/{id}' => 'gradesp'
                     ],
                 ],
+                ['class' => 'yii\web\UrlRule', 'pattern' => 'extracurricular/crear/<text:.*>', 'route' => 'extracurricular/crear'],
+                ['class' => 'yii\web\UrlRule', 'pattern' => 'extra-group/crear/<text:.*>', 'route' => 'extra-group/crear'],
+                [
+                    'class' => 'yii\web\UrlRule',
+                    'pattern' => 'extracurricular/modificar/<id:\d+>',
+                    'route' => 'extracurricular/modificar',
+                ],
+                [
+                    'class' => 'yii\web\UrlRule',
+                    'pattern' => 'extra-group/modificar/<id:\d+>',
+                    'route' => 'extra-group/modificar',
+                ],
+                ['class' => 'yii\web\UrlRule', 'pattern' => 'grade-person/crear/<text:.*>', 'route' => 'grade-person/crear'],
+                [
+                    'class' => 'yii\web\UrlRule',
+                    'pattern' => 'grade/modificar/<id:\d+>',
+                    'route' => 'grade/modificar',
+                ],
+
+                [
+                    'class' => 'yii\web\UrlRule',
+                    'pattern' => 'grade-person/modificar/<id:\d+>',
+                    'route' => 'grade-person/modificar',
+                ],
 
                 //REGLAS DE MONICA
                 //buscar total classroom
