@@ -223,7 +223,25 @@ $config = [
                     'extraPatterns' => [
                         'GET grupos/{id}' => 'grupos'
                     ],
-                ],                                   
+                ],      
+                //REGLAS IMPORTANTES PARA CREAR, MODIFICAR Y ELIMINAR    
+                ['class' => 'yii\web\UrlRule', 'pattern' => 'library/crear/<text:.*>', 'route' => 'library/crear'],                         
+                [
+                    'class' => 'yii\web\UrlRule',
+                    'pattern' => 'library/modificar/<id:\d+>',
+                    'route' => 'library/modificar',
+                ],
+                ['class' => 'yii\web\UrlRule', 'pattern' => 'classroom/crear/<text:.*>', 'route' => 'library/crear'],                         
+                [
+                    'class' => 'yii\web\UrlRule',
+                    'pattern' => 'classroom/modificar/<id:\d+>',
+                    'route' => 'classroom/modificar',
+                ],
+
+
+
+
+
 
                 //REGLAS RAUL
                 //reglas para buscar total

@@ -5,6 +5,7 @@ use yii\rest\ActiveController;
 use yii\filters\auth\CompositeAuth;
 use yii\filters\auth\HttpBearerAuth;
 use app\models\Classroom;
+use Yii;
 
 class ClassroomController extends ActiveController
 {
@@ -30,7 +31,7 @@ class ClassroomController extends ActiveController
             'authMethods' => [
                 HttpBearerAuth::className(),
             ],
-            'except' => ['index', 'view']
+            'except' => ['index', 'view', 'buscar', 'total', 'delete', 'crear', 'modificar']
         ];
     
         return $behaviors;
@@ -56,7 +57,42 @@ class ClassroomController extends ActiveController
         return $total;
     }
 
+
     public $modelClass = 'app\models\Classroom';  
     
     public $enableCsrfValidation = false;    
+
+    
+    public function actionCrear()
+    {
+        $postData = json_decode(file_get_contents('php://input'), true);
+    
+        $model = new Classroom();
+    
+        if ($postData && $model->load($postData, '') && $model->save()) {
+            return ['status' => 'success', 'message' => 'Registro creado exitosamente'];
+        } else {
+            return ['status' => 'error', 'message' => 'No se pudo crear el registro', 'errors' => $model->errors];
+        }
+    }
+
+    public function actionModificar($id)
+    {
+        $model = Classroom::findOne($id);
+
+        if (!$model) {
+            Yii::$app->response->statusCode = 404;
+            return ['status' => 'error', 'message' => 'El registro no fue encontrado'];
+        }
+
+        $model->attributes = Yii::$app->request->getBodyParams();
+
+        if ($model->save()) {
+            return ['status' => 'success', 'message' => 'Registro actualizado exitosamente'];
+        } else {
+            Yii::$app->response->statusCode = 400;
+            return ['status' => 'error', 'message' => 'No se pudo actualizar el registro', 'errors' => $model->errors];
+        }
+    }
+
 }
