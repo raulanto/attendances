@@ -24,10 +24,7 @@ $config = [
             'class' => 'yii\caching\FileCache',
         ],
         'user' => [
-            'identityClass'   => 'app\models\User',
-            'enableAutoLogin' => true,
-            'enableSession'   => false,
-            'loginUrl'        => null,
+
              'class' => 'webvimark\modules\UserManagement\components\UserConfig',
              'on afterLogin' => function ($event) {
                  \webvimark\modules\UserManagement\models\UserVisitLog::newVisitor($event->identity->id);
@@ -395,6 +392,33 @@ $config = [
                         'GET total/{text}' => 'total',
                         'GET qmaestro/{text}' => 'qmaestro',
                         'GET qperson/{text}' => 'qperson',
+
+                    ],
+                ],
+                //Regla para gradeperson
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'grade-person',
+                    'tokens' => [
+                        '{id}' => '<id:\d[\\d,]*>',
+                        '{text}' => '<text:\w+>'
+                    ],
+                    'extraPatterns' => [
+                        'POST guardar' => 'guardar',
+                        'PUT editar' => 'editar',
+
+                    ],
+                ],
+                //Regla para grade
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'grade',
+                    'tokens' => [
+                        '{id}' => '<id:\d[\\d,]*>',
+                        '{text}' => '<text:\w+>'
+                    ],
+                    'extraPatterns' => [
+                        'POST guardar' => 'guardar',
 
                     ],
                 ],

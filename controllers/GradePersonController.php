@@ -1,13 +1,12 @@
 <?php
 namespace app\controllers;
+use Yii;
 
 use yii\rest\ActiveController;
 use yii\filters\auth\CompositeAuth;
 use yii\filters\auth\HttpBearerAuth;
 
 use app\models\GradePerson;
-
-use Yii;
 
 class GradePersonController extends ActiveController
 {
@@ -33,7 +32,7 @@ class GradePersonController extends ActiveController
             'authMethods' => [
                 HttpBearerAuth::className(),
             ],
-            'except' => ['index', 'view', 'gradesp', 'delete', 'modificar', 'crear']
+            'except' => ['index', 'view', 'gradesp','guardar','editar','modificar', 'crear']
         ];
     
         return $behaviors;
@@ -67,6 +66,41 @@ class GradePersonController extends ActiveController
     }
 }
 
+public function actionGuardar()
+{
+    $model = new GradePerson();
+    $model->load(Yii::$app->getRequest()->getBodyParams(), '');
+
+    if ($model->save()) {
+        return $model;
+    } else {
+        return [($model->errors)];
+    }
+}
+
+public function actionEditar($graper_fkperson,$graper_commit,$graper_score)
+{
+
+    
+    
+    $model = GradePerson::findOne(['graper_fkperson' => $graper_fkperson]);
+    
+    if ($model === null) {
+        return ['error' => 'No se encontró la calificación para la persona con el ID proporcionado.'];
+    }
+    
+    $datos = new GradePerson();
+    $datos->load(Yii::$app->getRequest()->getBodyParams(), '');
+
+    $model->graper_commit = $graper_commit;
+    $model->graper_score = $graper_score;
+
+    if ($model->save()) {
+        return $model;
+    } else {
+        return ['error' => 'Error al editar la calificación. Detalles: ' . json_encode($model->errors)];
+    }
+}
 public function actionModificar($id)
 {
     $model =GradePerson::findOne($id);

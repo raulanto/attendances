@@ -1,11 +1,10 @@
 <?php
 namespace app\controllers;
-
+use Yii;
 use yii\rest\ActiveController;
 use yii\filters\auth\CompositeAuth;
 use yii\filters\auth\HttpBearerAuth;
 use app\models\Grade;
-use Yii;
 
 class GradeController extends ActiveController
 {
@@ -31,7 +30,7 @@ class GradeController extends ActiveController
             'authMethods' => [
                 HttpBearerAuth::className(),
             ],
-            'except' => ['index', 'view', 'grades', 'buscar', 'total', 'delete', 'modificar']
+            'except' => ['index', 'view', 'grades', 'buscar', 'total','guardar','editar','delete', 'modificar']
         ];
     
         return $behaviors;
@@ -113,6 +112,18 @@ class GradeController extends ActiveController
 
         return $total;
     }
+
+    public function actionGuardar()
+{
+    $model = new Grade();
+    $model->load(Yii::$app->getRequest()->getBodyParams(), '');
+
+    if ($model->save()) {
+        return $model;
+    } else {
+        return [($model->errors)];
+    }
+}
 
     public function actionModificar($id)
     {
