@@ -170,6 +170,8 @@ $config = [
                     'route' => 'extra-group/modificar',
                 ],
                 ['class' => 'yii\web\UrlRule', 'pattern' => 'grade-person/crear/<text:.*>', 'route' => 'grade-person/crear'],
+
+                ['class' => 'yii\web\UrlRule', 'pattern' => 'grade/crear/<text:.*>', 'route' => 'grade/crear'],
                 [
                     'class' => 'yii\web\UrlRule',
                     'pattern' => 'grade/modificar/<id:\d+>',

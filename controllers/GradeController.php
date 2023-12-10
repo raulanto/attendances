@@ -30,7 +30,7 @@ class GradeController extends ActiveController
             'authMethods' => [
                 HttpBearerAuth::className(),
             ],
-            'except' => ['index', 'view', 'grades', 'buscar', 'total','guardar','editar','delete', 'modificar']
+            'except' => ['index', 'view', 'grades', 'buscar', 'total','guardar','editar','delete', 'modificar', 'crear']
         ];
     
         return $behaviors;
@@ -141,6 +141,19 @@ class GradeController extends ActiveController
         } else {
             Yii::$app->response->statusCode = 400;
             return ['status' => 'error', 'message' => 'No se pudo actualizar el registro', 'errors' => $model->errors];
+        }
+    }
+
+    public function actionCrear()
+    {
+        $postData = json_decode(file_get_contents('php://input'), true);
+    
+        $model = new Grade();
+    
+        if ($postData && $model->load($postData, '') && $model->save()) {
+            return ['status' => 'success', 'message' => 'Registro creado exitosamente', 'id' => $model->gra_id];
+        } else {
+            return ['status' => 'error', 'message' => 'No se pudo crear el registro', 'errors' => $model->errors];
         }
     }
 }
