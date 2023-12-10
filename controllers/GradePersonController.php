@@ -7,6 +7,8 @@ use yii\filters\auth\HttpBearerAuth;
 
 use app\models\GradePerson;
 
+use Yii;
+
 class GradePersonController extends ActiveController
 {
     public function behaviors()
@@ -31,7 +33,7 @@ class GradePersonController extends ActiveController
             'authMethods' => [
                 HttpBearerAuth::className(),
             ],
-            'except' => ['index', 'view', 'gradesp']
+            'except' => ['index', 'view', 'gradesp', 'delete', 'modificar', 'crear']
         ];
     
         return $behaviors;
@@ -62,6 +64,38 @@ class GradePersonController extends ActiveController
     } else {
         // Manejar la situación en la que no se encontraron listas
         return ['message' => 'No se encontraron calificaciones para la tarea asignada'];
+    }
+}
+
+public function actionModificar($id)
+{
+    $model =GradePerson::findOne($id);
+
+    if (!$model) {
+        Yii::$app->response->statusCode = 404;
+        return ['status' => 'error', 'message' => 'El registro no fue encontrado'];
+    }
+
+    $model->attributes = Yii::$app->request->getBodyParams();
+
+    if ($model->save()) {
+        return ['status' => 'success', 'message' => 'Registro actualizado exitosamente'];
+    } else {
+        Yii::$app->response->statusCode = 400;
+        return ['status' => 'error', 'message' => 'No se pudo actualizar el registro', 'errors' => $model->errors];
+    }
+}
+
+public function actionCrear()
+{
+    $postData = json_decode(file_get_contents('php://input'), true);
+
+    $model = new GradePerson();
+
+    if ($postData && $model->load($postData, '') && $model->save()) {
+        return ['status' => 'success', 'message' => 'Registro creado exitosamente'];
+    } else {
+        return ['status' => 'error', 'message' => 'No se pudo crear el registro', 'errors' => $model->errors];
     }
 }
 }
