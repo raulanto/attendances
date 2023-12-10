@@ -87,12 +87,30 @@ $config = [
                 ['class' => 'yii\web\UrlRule', 'pattern' => 'extracurricular/buscar-todos/<text:.*>', 'route' => 'extracurricular/buscar-todos'],
                 ['class' => 'yii\web\UrlRule', 'pattern' => 'extracurricular/crear/<text:.*>', 'route' => 'extracurricular/crear'],
                 ['class' => 'yii\web\UrlRule', 'pattern' => 'extra-group/crear/<text:.*>', 'route' => 'extra-group/crear'],
+                ['class' => 'yii\web\UrlRule', 'pattern' => 'grade-person/crear/<text:.*>', 'route' => 'grade-person/crear'],
 
                 [
                     'class' => 'yii\web\UrlRule',
-                    'pattern' => 'extracurricular/actualizar/<id:\d+>',
-                    'route' => 'extracurricular/actualizar',
-                    'verb' => 'PUT', // Específica el verbo HTTP que se debe usar (PUT para modificaciones)
+                    'pattern' => 'extracurricular/modificar/<id:\d+>',
+                    'route' => 'extracurricular/modificar',
+                ],
+
+                [
+                    'class' => 'yii\web\UrlRule',
+                    'pattern' => 'extra-group/modificar/<id:\d+>',
+                    'route' => 'extra-group/modificar',
+                ],
+
+                [
+                    'class' => 'yii\web\UrlRule',
+                    'pattern' => 'grade/modificar/<id:\d+>',
+                    'route' => 'grade/modificar',
+                ],
+
+                [
+                    'class' => 'yii\web\UrlRule',
+                    'pattern' => 'grade-person/modificar/<id:\d+>',
+                    'route' => 'grade-person/modificar',
                 ],
                 
                 [
