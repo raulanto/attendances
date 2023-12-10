@@ -85,7 +85,16 @@ $config = [
                 ['class' => 'yii\web\UrlRule', 'pattern' => 'extracurricular/buscar/<text:.*>', 'route' => 'extracurricular/buscar'],
                 ['class' => 'yii\web\UrlRule', 'pattern' => 'extracurricular/total/<text:.*>', 'route' => 'extracurricular/total'],
                 ['class' => 'yii\web\UrlRule', 'pattern' => 'extracurricular/buscar-todos/<text:.*>', 'route' => 'extracurricular/buscar-todos'],
+                ['class' => 'yii\web\UrlRule', 'pattern' => 'extracurricular/crear/<text:.*>', 'route' => 'extracurricular/crear'],
+                ['class' => 'yii\web\UrlRule', 'pattern' => 'extra-group/crear/<text:.*>', 'route' => 'extra-group/crear'],
 
+                [
+                    'class' => 'yii\web\UrlRule',
+                    'pattern' => 'extracurricular/actualizar/<id:\d+>',
+                    'route' => 'extracurricular/actualizar',
+                    'verb' => 'PUT', // Específica el verbo HTTP que se debe usar (PUT para modificaciones)
+                ],
+                
                 [
                     'class' => 'yii\web\UrlRule',
                     'pattern' => 'extra-group/extragroups/<id:\d+>',
@@ -94,7 +103,7 @@ $config = [
                 ],
                 [
                     'class' => 'yii\web\UrlRule',
-                    'pattern' => 'extra-group/buscar/<text:\w+>',
+                    'pattern' => 'extra-group/buscar/<text:.*>',
                     'route' => 'extra-group/buscar',
                 ],
                 [

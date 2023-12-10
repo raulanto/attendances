@@ -30,7 +30,7 @@ class ExtracurricularController extends ActiveController
             'authMethods' => [
                 HttpBearerAuth::className(),
             ],
-            'except' => ['index', 'view', 'buscar', 'buscar-todos', 'delete'] //MOD----------
+            'except' => ['index', 'view', 'buscar', 'total', 'buscar-todos', 'delete', 'crear', 'actualizar'] //MOD----------
         ];
     
         return $behaviors;
@@ -71,9 +71,11 @@ class ExtracurricularController extends ActiveController
 
     public function actionCrear()
     {
+        $postData = json_decode(file_get_contents('php://input'), true);
+    
         $model = new Extracurricular();
     
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($postData && $model->load($postData, '') && $model->save()) {
             return ['status' => 'success', 'message' => 'Registro creado exitosamente'];
         } else {
             return ['status' => 'error', 'message' => 'No se pudo crear el registro', 'errors' => $model->errors];
